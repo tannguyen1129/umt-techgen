@@ -117,7 +117,7 @@ export default function PartnersPage() {
                 <div className="md:w-5/12 w-full flex justify-center">
                     <div className="bg-white p-6 md:p-8 rounded-2xl shadow-xl w-3/4 md:w-full aspect-square max-w-[280px] md:max-w-[320px] flex items-center justify-center transition duration-500">
                         <div className="relative w-full h-full">
-                            <Image src="/images/logo-kcn.png" alt="Khoa Công Nghệ" fill className="object-contain" />
+                            <Image src="/images/sot-xanh.png" alt="Khoa Công Nghệ" fill className="object-contain" />
                         </div>
                     </div>
                 </div>
