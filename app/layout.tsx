@@ -1,7 +1,8 @@
-import Link from "next/link";
-import Image from "next/image";
 import "./globals.css";
 import { Inter } from "next/font/google";
+import Navbar from "@/components/Navbar"; 
+import Link from "next/link";
+import Image from "next/image";
 import { Lock, Code, Facebook, Globe, Mail, Phone, MapPin } from "lucide-react";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -19,36 +20,9 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <body className={inter.className}>
-        {/* NAVBAR */}
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-100">
-          <div className="container mx-auto px-4 h-24 flex justify-between items-center">
-            
-            {/* LOGO GROUP */}
-            <Link href="/" className="flex items-center gap-6">
-              <div className="relative h-14 w-40 md:h-16 md:w-48">
-                <Image src="/images/logo-umt.png" alt="UMT" fill className="object-contain" />
-              </div>
-              <div className="h-10 w-[1px] bg-slate-300 hidden sm:block"></div>
-              <div className="relative h-14 w-44 md:h-16 md:w-52 hidden sm:block">
-                <Image src="/images/logo-kcn.png" alt="KCN" fill className="object-contain" />
-              </div>
-            </Link>
-
-            {/* MENU LINKS */}
-            <div className="hidden xl:flex gap-8 text-base font-semibold text-slate-700">
-              <Link href="/" className="hover:text-blue-600 transition">Trang chủ</Link>
-              <Link href="/chuong-trinh" className="hover:text-blue-600 transition">Chương trình</Link>
-              <Link href="/lich-trinh" className="hover:text-blue-600 transition">Mốc thời gian</Link>
-              <Link href="/the-le" className="hover:text-blue-600 transition">Thể lệ</Link>
-              <Link href="/doi-tac" className="hover:text-blue-600 transition">Đối tác</Link>
-              <Link href="/lien-he" className="hover:text-blue-600 transition">Liên hệ</Link>
-            </div>
-
-            <Link href="/dang-ky" className="bg-blue-900 text-white px-6 py-3 rounded-full font-bold hover:bg-blue-800 transition shadow-lg hover:shadow-blue-900/20 text-sm md:text-base whitespace-nowrap">
-              Đăng ký ngay
-            </Link>
-          </div>
-        </nav>
+        
+        {/* 2. SỬ DỤNG NAVBAR MỚI Ở ĐÂY */}
+        <Navbar />
 
         {/* MAIN CONTENT */}
         <main className="pt-24 min-h-screen">

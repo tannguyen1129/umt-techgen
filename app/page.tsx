@@ -34,36 +34,39 @@ export default function Home() {
   return (
     <div className="flex flex-col gap-0">
       
-      {/* 1. HERO SECTION */}
-      <section className="relative pt-20 pb-32 bg-gradient-to-br from-blue-50 via-white to-indigo-50 overflow-hidden">
+      {/* 1. HERO SECTION - Đã trả về vị trí cũ (Chữ trên - Ảnh dưới) */}
+      <section className="relative pt-10 pb-20 md:pt-20 md:pb-32 bg-gradient-to-br from-blue-50 via-white to-indigo-50 overflow-hidden">
         <div className="absolute top-20 right-0 w-[500px] h-[500px] bg-blue-200/20 rounded-full blur-3xl -z-10"></div>
         <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-indigo-200/20 rounded-full blur-3xl -z-10"></div>
 
-        <div className="container mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
-          <div className="space-y-8 animate-fade-in-up">
-            <div className="inline-flex items-center gap-2 bg-white border border-blue-100 px-4 py-2 rounded-full shadow-sm">
+        <div className="container mx-auto px-4 grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+          
+          {/* TEXT CONTENT - Vị trí mặc định (Nằm trên ở Mobile, Bên trái ở Desktop) */}
+          <div className="space-y-6 md:space-y-8 animate-fade-in-up text-center md:text-left">
+            
+            <div className="inline-flex items-center gap-2 bg-white border border-blue-100 px-3 py-1.5 md:px-4 md:py-2 rounded-full shadow-sm">
               <span className="flex h-2 w-2 rounded-full bg-red-500 animate-pulse"></span>
-              <span className="text-xs font-bold text-blue-900 tracking-wide uppercase">Sắp mở đăng ký mùa giải 2025</span>
+              <span className="text-[10px] md:text-xs font-bold text-blue-900 tracking-wide uppercase">Sắp mở đăng ký mùa giải 2025</span>
             </div>
             
-            <h1 className="text-5xl md:text-7xl font-extrabold text-slate-900 leading-tight">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-slate-900 leading-tight">
               UMT TechGen <span className="text-blue-600 block mt-2">2025</span>
             </h1>
             
-            <p className="text-xl md:text-2xl text-slate-600 font-medium max-w-lg">
+            <p className="text-lg md:text-2xl text-slate-600 font-medium max-w-lg mx-auto md:mx-0">
               Giải mã công nghệ - Khơi nguồn đam mê
             </p>
             
-            <p className="text-slate-600 leading-relaxed text-lg">
+            <p className="text-slate-600 leading-relaxed text-base md:text-lg">
               Sân chơi lập trình chuyên nghiệp quy mô toàn quốc dành cho học sinh THPT. 
               Nơi tư duy tỏa sáng và cơ hội nhận học bổng đại học giá trị.
             </p>
             
-            <div className="flex flex-wrap gap-4 pt-4">
-              <Link href="/dang-ky" className="bg-blue-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-blue-700 transition flex items-center gap-2 shadow-xl hover:shadow-blue-600/30 transform hover:-translate-y-1">
+            <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center md:justify-start">
+              <Link href="/dang-ky" className="bg-blue-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-blue-700 transition flex items-center justify-center gap-2 shadow-xl hover:shadow-blue-600/30 transform hover:-translate-y-1 w-full sm:w-auto">
                 Đăng ký ngay <ArrowRight size={20} />
               </Link>
-              <Link href="/chuong-trinh" className="bg-white text-slate-700 border border-slate-200 px-8 py-4 rounded-xl font-bold hover:border-blue-600 hover:text-blue-600 transition shadow-sm">
+              <Link href="/chuong-trinh" className="bg-white text-slate-700 border border-slate-200 px-8 py-4 rounded-xl font-bold hover:border-blue-600 hover:text-blue-600 transition shadow-sm w-full sm:w-auto text-center">
                 Tìm hiểu thêm
               </Link>
             </div>

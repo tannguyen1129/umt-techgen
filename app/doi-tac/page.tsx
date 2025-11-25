@@ -108,41 +108,47 @@ export default function PartnersPage() {
         </section>
 
         {/* --- 3. ĐƠN VỊ CHUYÊN MÔN (KHOA CN) --- */}
-        <section className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-3xl p-8 md:p-16 shadow-sm border border-blue-100/50">
-            <div className="flex flex-col md:flex-row items-center gap-12">
-                
-                {/* Left: Logo Box */}
-                <div className="md:w-5/12 w-full flex justify-center">
-                    <div className="bg-white p-8 rounded-2xl shadow-xl w-full aspect-square max-w-[320px] flex items-center justify-center transform md:-rotate-2 hover:rotate-0 transition duration-500">
-                        <div className="relative w-full h-full">
-                             <Image src="/images/logo-kcn.png" alt="Khoa Công Nghệ" fill className="object-contain" />
-                        </div>
-                    </div>
-                </div>
+<section className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-3xl p-8 md:p-16 shadow-sm border border-blue-100/50">
+    <div className="flex flex-col md:flex-row items-center gap-12">
 
-                {/* Right: Content */}
-                <div className="md:w-7/12 text-center md:text-left">
-                    <div className="inline-flex items-center gap-2 text-blue-600 font-bold uppercase tracking-wider mb-4 text-sm">
-                        <Cpu size={18} /> Đơn vị Chuyên môn
-                    </div>
-                    <h3 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-6">Khoa Công Nghệ</h3>
-                    <p className="text-slate-600 text-lg mb-6 leading-relaxed">
-                        Chịu trách nhiệm toàn bộ về nội dung học thuật: Xây dựng đề thi, thành lập Hội đồng ra đề và chấm thi, tổ chức các buổi hướng dẫn chuyên môn (training) và đảm bảo chất lượng chuyên môn cao nhất cho kỳ thi.
-                    </p>
-                    
-                    <div className="space-y-3">
-                        <div className="flex items-start gap-3 text-slate-700 justify-center md:justify-start">
-                            <div className="mt-1 w-2 h-2 bg-blue-500 rounded-full shrink-0"></div>
-                            <p>Hội đồng giám khảo uy tín.</p>
-                        </div>
-                        <div className="flex items-start gap-3 text-slate-700 justify-center md:justify-start">
-                            <div className="mt-1 w-2 h-2 bg-blue-500 rounded-full shrink-0"></div>
-                            <p>Đội ngũ giảng viên & Mentor giàu kinh nghiệm.</p>
-                        </div>
-                    </div>
+        {/* Left: Logo Box */}
+        <div className="md:w-5/12 w-full flex justify-center">
+            <div className="bg-white p-8 rounded-2xl shadow-xl w-full aspect-square max-w-[320px] flex items-center justify-center transition duration-500">
+                <div className="relative w-full h-full">
+                    <Image src="/images/logo-kcn.png" alt="Khoa Công Nghệ" fill className="object-contain" />
                 </div>
             </div>
-        </section>
+        </div>
+
+        {/* Right: Content */}
+        <div className="md:w-7/12 text-center md:text-left">
+            <div className="inline-flex items-center gap-2 text-blue-600 font-bold uppercase tracking-wider mb-4 text-sm">
+                <Cpu size={18} /> Đơn vị Chuyên môn
+            </div>
+
+            <h3 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-6">
+                Khoa Công Nghệ
+            </h3>
+
+            <p className="text-slate-600 text-lg mb-6 leading-relaxed">
+                Chịu trách nhiệm toàn bộ về nội dung học thuật: Xây dựng đề thi, thành lập Hội đồng ra đề và chấm thi, tổ chức các buổi hướng dẫn chuyên môn (training) và đảm bảo chất lượng chuyên môn cao nhất cho kỳ thi.
+            </p>
+
+            <div className="space-y-3">
+                <div className="flex items-start gap-3 text-slate-700 justify-center md:justify-start">
+                    <div className="mt-1 w-2 h-2 bg-blue-500 rounded-full shrink-0"></div>
+                    <p>Hội đồng giám khảo uy tín do PGS.TS. Trần Đan Thư - Trưởng Khoa Công Nghệ làm Chủ tịch Hội đồng Giám khảo.</p>
+                </div>
+
+                <div className="flex items-start gap-3 text-slate-700 justify-center md:justify-start">
+                    <div className="mt-1 w-2 h-2 bg-blue-500 rounded-full shrink-0"></div>
+                    <p>Đội ngũ giảng viên & Mentor giàu kinh nghiệm.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 
         {/* --- 4. ĐƠN VỊ VẬN HÀNH (APC - ĐÃ NỚI RỘNG & THOÁNG HƠN) --- */}
         <section className="bg-[#FFF9F5] rounded-3xl p-8 md:p-16 border border-orange-100">
