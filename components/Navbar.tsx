@@ -13,13 +13,18 @@ export default function Navbar() {
       <div className="container mx-auto px-4 h-20 md:h-24 flex justify-between items-center">
         
         {/* LOGO GROUP */}
-        <Link href="/" className="flex items-center gap-4 md:gap-6">
-          <div className="relative h-10 w-28 md:h-16 md:w-48">
-            <Image src="/images/logo-umt.png" alt="UMT" fill className="object-contain" />
+        <Link href="/" className="flex items-center gap-2 md:gap-6">
+          {/* Logo UMT */}
+          <div className="relative h-9 w-24 sm:h-16 sm:w-48 shrink-0">
+            <Image src="/images/logo-umt.png" alt="UMT" fill className="object-contain object-left" />
           </div>
-          <div className="h-8 w-[1px] bg-slate-300 hidden sm:block"></div>
-          <div className="relative h-10 w-32 md:h-16 md:w-52 hidden sm:block">
-            <Image src="/images/sot-xanh.png" alt="KCN" fill className="object-contain" />
+          
+          {/* Đường kẻ dọc - Hiện luôn trên mọi màn hình */}
+          <div className="h-6 w-[1px] bg-slate-300 sm:h-8"></div>
+          
+          {/* Logo Khoa Công Nghệ - Đã xóa 'hidden' */}
+          <div className="relative h-9 w-28 sm:h-16 sm:w-52 shrink-0">
+            <Image src="/images/sot-xanh.png" alt="KCN" fill className="object-contain object-left" />
           </div>
         </Link>
 
