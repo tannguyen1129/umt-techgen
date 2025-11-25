@@ -107,61 +107,61 @@ export default function TimelinePage() {
 
   return (
     <div className="bg-slate-50 min-h-screen pb-20">
-      {/* Header */}
-      <div className="bg-blue-900 text-white pt-16 pb-24 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-10 translate-x-10"></div>
+      {/* Header - Responsive Padding */}
+      <div className="bg-blue-900 text-white pt-12 pb-16 md:pt-16 md:pb-24 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-48 h-48 md:w-64 md:h-64 bg-white/5 rounded-full blur-3xl -translate-y-10 translate-x-10"></div>
         <div className="container mx-auto px-4 text-center relative z-10">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Lộ trình cuộc thi</h1>
-          <p className="text-blue-200 max-w-2xl mx-auto text-lg">
+          <h1 className="text-3xl md:text-5xl font-bold mb-2 md:mb-4">Lộ trình cuộc thi</h1>
+          <p className="text-blue-200 max-w-2xl mx-auto text-base md:text-lg">
             Hành trình chinh phục công nghệ với các mốc thời gian quan trọng dành cho thí sinh.
           </p>
         </div>
       </div>
 
-      {/* Timeline Content */}
-      <div className="container mx-auto px-4 -mt-12 relative z-20 max-w-5xl">
+      {/* Timeline Content - Responsive Margin */}
+      <div className="container mx-auto px-4 -mt-8 md:-mt-12 relative z-20 max-w-5xl">
         {events.map((phase) => (
-          <div key={phase.id} className="mb-16">
-            {/* Phase Header */}
-            <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 mb-8 flex items-center gap-3 sticky top-24 z-30">
-              <span className="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full uppercase">
+          <div key={phase.id} className="mb-12 md:mb-16">
+            {/* Phase Header - Responsive Text */}
+            <div className="bg-white p-3 md:p-4 rounded-xl shadow-sm border border-slate-200 mb-6 md:mb-8 flex flex-col sm:flex-row items-start sm:items-center gap-2 md:gap-3 sticky top-20 md:top-24 z-30">
+              <span className="bg-blue-100 text-blue-800 text-[10px] md:text-xs font-bold px-2 py-1 md:px-3 md:py-1 rounded-full uppercase shrink-0">
                 Giai đoạn {phase.id}
               </span>
-              <h2 className="text-lg font-bold text-slate-900">{phase.phase}</h2>
+              <h2 className="text-base md:text-lg font-bold text-slate-900 leading-tight">{phase.phase}</h2>
             </div>
 
-            {/* Phase Items Container */}
+            {/* Phase Items Container - Responsive Padding */}
             <div className="relative pl-0 md:pl-8">
               
-              {/* Cột mốc thời gian (Layout Mobile & Desktop) */}
-              <div className="space-y-8">
+              {/* Cột mốc thời gian */}
+              <div className="space-y-6 md:space-y-8">
                   {phase.items.map((item, index) => (
-                    <div key={index} className="relative flex flex-col md:flex-row gap-6 group items-start"> {/* SỬA: items-start để căn đỉnh trên */}
+                    <div key={index} className="relative flex flex-col md:flex-row gap-4 md:gap-6 group items-start"> 
                       
-                      {/* 1. CỘT NGÀY THÁNG (Bên trái trên Desktop) */}
-                      <div className="md:w-48 md:text-right shrink-0 mt-1"> {/* SỬA: mt-1 để căn đều với tiêu đề bên phải */}
-                        <div className="inline-flex items-center gap-2 text-blue-700 font-bold bg-blue-50 border border-blue-100 px-3 py-2 rounded-lg shadow-sm whitespace-nowrap">
+                      {/* 1. CỘT NGÀY THÁNG (Responsive: Flex order thay đổi hoặc style riêng) */}
+                      {/* Mobile: Full width width margin bottom. Desktop: Width cố định, text right */}
+                      <div className="w-full md:w-48 md:text-right shrink-0 md:mt-1"> 
+                        <div className="inline-flex items-center gap-2 text-blue-700 font-bold bg-blue-50 border border-blue-100 px-3 py-2 rounded-lg shadow-sm whitespace-nowrap w-full md:w-auto justify-center md:justify-end">
                             <Calendar size={16} className="shrink-0" />
                             <span className="text-sm">{item.date}</span>
                         </div>
                       </div>
 
-                      {/* 2. TRỤC GIỮA (Dot & Line) */}
+                      {/* 2. TRỤC GIỮA (Hidden on Mobile) */}
                       <div className="hidden md:flex flex-col items-center relative self-stretch mx-2">
                         {/* Dot */}
                         <div className={`w-4 h-4 rounded-full border-2 z-10 mt-3 bg-white transition-all duration-300 group-hover:scale-125
                             ${item.highlight ? 'border-orange-500 ring-4 ring-orange-100' : 'border-blue-500 ring-4 ring-blue-50'}
                         `}></div>
                         
-                        {/* Vertical Line (Nối các điểm) */}
-                        {/* Chỉ hiện line nối nếu không phải phần tử cuối cùng của nhóm */}
+                        {/* Line nối */}
                         {index !== phase.items.length - 1 && (
                             <div className="w-0.5 bg-slate-200 absolute top-8 bottom-[-2rem] left-1/2 -translate-x-1/2"></div>
                         )}
                       </div>
 
-                      {/* 3. NỘI DUNG (Bên phải) */}
-                      <div className={`flex-1 bg-white p-6 rounded-2xl border transition-all duration-300 hover:shadow-lg relative
+                      {/* 3. NỘI DUNG */}
+                      <div className={`flex-1 bg-white p-5 md:p-6 rounded-2xl border transition-all duration-300 hover:shadow-lg relative w-full
                           ${item.highlight ? 'border-orange-200 shadow-orange-50' : 'border-slate-200 shadow-sm'}
                       `}>
                         {/* Mũi tên chỉ vào timeline (Desktop only) */}
@@ -169,17 +169,18 @@ export default function TimelinePage() {
                             ${item.highlight ? 'border-orange-200' : 'border-slate-200'}
                         `}></div>
 
-                        <div className="flex justify-between items-start mb-2">
+                        <div className="flex flex-col sm:flex-row justify-between items-start mb-3 gap-2">
                           <div className="flex items-center gap-3">
                             {item.icon ? item.icon : (
-                                <div className={`w-2 h-2 rounded-full ${item.highlight ? 'bg-orange-500' : 'bg-blue-500'}`}></div>
+                                <div className={`w-2 h-2 rounded-full shrink-0 ${item.highlight ? 'bg-orange-500' : 'bg-blue-500'}`}></div>
                             )}
-                            <h3 className={`text-xl font-bold ${item.highlight ? 'text-slate-900' : 'text-slate-800'}`}>
+                            <h3 className={`text-lg md:text-xl font-bold leading-tight ${item.highlight ? 'text-slate-900' : 'text-slate-800'}`}>
                                 {item.title}
                             </h3>
                           </div>
                           
-                          <span className={`text-[10px] uppercase font-bold px-2 py-1 rounded border tracking-wide ${
+                          {/* Type Badge - Responsive size */}
+                          <span className={`text-[10px] uppercase font-bold px-2 py-1 rounded border tracking-wide shrink-0 self-start sm:self-auto ${
                             item.type === 'Online' ? 'bg-green-50 text-green-700 border-green-100' :
                             item.type === 'Training' ? 'bg-purple-50 text-purple-700 border-purple-100' :
                             'bg-yellow-50 text-yellow-700 border-yellow-100'
@@ -188,13 +189,13 @@ export default function TimelinePage() {
                           </span>
                         </div>
 
-                        <p className="text-slate-600 mb-4 leading-relaxed">{item.desc}</p>
+                        <p className="text-sm md:text-base text-slate-600 mb-4 leading-relaxed">{item.desc}</p>
 
-                        <div className="flex items-center gap-2 text-sm text-slate-500 bg-slate-50 p-2 rounded-lg w-fit border border-slate-100">
-                            {item.location.includes("Teams") ? <Video size={16} /> : 
-                             item.location.includes("UMTOJ") ? <Monitor size={16} /> : 
-                             <MapPin size={16} />}
-                            <span className="font-medium">{item.location}</span>
+                        <div className="flex items-center gap-2 text-xs md:text-sm text-slate-500 bg-slate-50 p-2 rounded-lg w-fit border border-slate-100 max-w-full">
+                            {item.location.includes("Teams") ? <Video size={14} className="shrink-0" /> : 
+                             item.location.includes("UMTOJ") ? <Monitor size={14} className="shrink-0" /> : 
+                             <MapPin size={14} className="shrink-0" />}
+                            <span className="font-medium truncate">{item.location}</span>
                         </div>
                       </div>
                     </div>
