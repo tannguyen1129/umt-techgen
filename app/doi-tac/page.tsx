@@ -1,21 +1,42 @@
 import Image from "next/image";
-import { Building2, Code2, Cpu, Users, GraduationCap, Target, Star } from "lucide-react";
+import { Cpu, Users, Star } from "lucide-react";
 
 export default function PartnersPage() {
+  // 1. Dữ liệu Đối tác Chiến lược
+  // BẠN HÃY ĐIỀN LINK WEBSITE VÀO PHẦN website: "..." NHÉ
+  const strategicPartners = [
+    { id: 1, name: "ZaloPay", src: "/images/Zalopay_logo_umt.png", website: "#" },
+    { id: 2, name: "Hội Tin học TP.HCM", src: "/images/hca_hcm.png", website: "#" },
+    { id: 3, name: "SITC", src: "/images/sitc.png", website: "#" },
+  ];
+
+  // 2. Dữ liệu Đối tác Đồng hành
+  const companionPartners = [
+    { id: 4, name: "AIHAY", src: "/images/4_AIHAY.png", website: "#" },
+    { id: 5, name: "THD", src: "/images/5_thd.png", website: "#" },
+    { id: 6, name: "InnoEx", src: "/images/6_innoex.png", website: "#" },
+    { id: 7, name: "IVS", src: "/images/7_ivs.png", website: "#" },
+    { id: 8, name: "Braney", src: "/images/8_braney.png", website: "#" },
+    { id: 9, name: "PVcomBank", src: "/images/9_pvcombank.png", website: "#" },
+    { id: 10, name: "QuickCom", src: "/images/10_quickcom1.png", website: "#" },
+    { id: 11, name: "SoftWorld", src: "/images/11_softworld.png", website: "#" },
+    { id: 12, name: "VietDynamic", src: "/images/12_vietdynamic.png", website: "#" },
+    { id: 13, name: "Vinasa", src: "/images/13_vinasa.png", website: "#" },
+    { id: 14, name: "VNetwork", src: "/images/14_Vnetwork.png", website: "#" },
+    { id: 15, name: "WESET", src: "/images/15_weset.png", website: "#" },
+  ];
+
   return (
     <div className="bg-white min-h-screen font-sans text-slate-600">
       
       {/* --- HEADER --- */}
       <div className="relative bg-gradient-to-br from-blue-900 via-indigo-900 to-blue-800 py-16 md:py-24 text-center overflow-hidden">
-        
-        {/* Decorative Background Elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
             <div className="absolute -top-24 -left-24 w-64 h-64 md:w-96 md:h-96 bg-blue-500 rounded-full blur-3xl"></div>
             <div className="absolute top-1/2 right-0 w-48 h-48 md:w-64 md:h-64 bg-purple-500 rounded-full blur-3xl"></div>
             <div className="absolute bottom-0 left-1/3 w-64 h-64 md:w-80 md:h-80 bg-indigo-500 rounded-full blur-3xl"></div>
         </div>
 
-        {/* Content Header */}
         <div className="container mx-auto px-4 relative z-10">
             <div className="inline-block mb-4 px-4 py-1 rounded-full bg-white/10 text-blue-100 text-[10px] md:text-xs font-bold uppercase tracking-widest border border-white/10 backdrop-blur-sm">
                 UMT TechGen 2025
@@ -27,30 +48,74 @@ export default function PartnersPage() {
                 Sự thành công của cuộc thi được kiến tạo bởi sự hợp tác chặt chẽ giữa các đơn vị uy tín hàng đầu, cùng chung sứ mệnh ươm mầm tài năng công nghệ trẻ.
             </p>
         </div>
-
-        {/* Bottom Curve */}
         <div className="absolute bottom-0 left-0 w-full h-8 md:h-16 bg-gradient-to-t from-white to-transparent"></div>
       </div>
 
       <div className="container mx-auto px-4 py-12 md:py-16 space-y-16 md:space-y-24 max-w-6xl">
         
-        {/* --- 1. ĐỐI TÁC CHIẾN LƯỢC & NHÀ TÀI TRỢ --- */}
+        {/* --- 1. ĐỐI TÁC CHIẾN LƯỢC --- */}
         <section className="text-center">
-            <div className="mb-8 md:mb-12">
+            <div className="mb-8 md:mb-10">
                 <h2 className="text-2xl md:text-4xl font-extrabold text-slate-900 mb-3 md:mb-4">
-                    Đối tác chiến lược & Nhà tài trợ
+                    Đối tác Chiến lược
                 </h2>
-                <p className="text-slate-500 text-base md:text-lg max-w-2xl mx-auto leading-relaxed px-4">
-                    Chúng tôi luôn chào đón các đơn vị doanh nghiệp đồng hành cùng thế hệ tài năng công nghệ thông tin trẻ.
+                <div className="w-24 h-1 bg-blue-600 mx-auto rounded-full"></div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 px-4 md:px-0 max-w-4xl mx-auto">
+                {strategicPartners.map((partner) => (
+                    // Đổi từ div sang thẻ a để gắn link
+                    <a 
+                        key={partner.id} 
+                        href={partner.website} // Link website sẽ được lấy từ data ở trên
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="block h-40 md:h-48 bg-white rounded-2xl shadow-lg border border-slate-100 flex items-center justify-center p-6 hover:shadow-xl hover:-translate-y-1 transition duration-300 group cursor-pointer"
+                    >
+                        <div className="relative w-full h-full">
+                            <Image 
+                                src={partner.src} 
+                                alt={partner.name} 
+                                fill 
+                                // Đã xóa class grayscale để hiện màu luôn
+                                className="object-contain transition duration-500 group-hover:scale-105" 
+                            />
+                        </div>
+                    </a>
+                ))}
+            </div>
+        </section>
+
+        {/* --- 2. ĐỐI TÁC ĐỒNG HÀNH --- */}
+        <section className="text-center">
+            <div className="mb-8 md:mb-10">
+                <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-3 md:mb-4">
+                    Đối tác Đồng hành
+                </h2>
+                <p className="text-slate-500 text-sm md:text-base max-w-2xl mx-auto leading-relaxed px-4">
+                    Cảm ơn sự đồng hành quý báu từ các doanh nghiệp và tổ chức giáo dục.
                 </p>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 px-4 md:px-0">
-                {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="h-32 md:h-40 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center p-4 hover:border-yellow-400 hover:bg-yellow-50/50 transition duration-300 cursor-pointer group">
-                        <span className="text-slate-300 font-bold text-4xl md:text-5xl mb-2 group-hover:text-yellow-400 transition">?</span>
-                        <span className="text-slate-400 text-[10px] md:text-xs font-medium group-hover:text-yellow-700">Dành cho Nhà tài trợ</span>
-                    </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6 px-2 md:px-0">
+                {companionPartners.map((partner) => (
+                    <a 
+                        key={partner.id} 
+                        href={partner.website}
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="block h-24 md:h-32 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center p-4 hover:border-blue-200 hover:shadow-md transition duration-300 group cursor-pointer"
+                    >
+                         <div className="relative w-full h-full">
+                            <Image 
+                                src={partner.src} 
+                                alt={partner.name} 
+                                fill 
+                                // Đã xóa class grayscale
+                                className="object-contain transition duration-300 group-hover:scale-110" 
+                            />
+                        </div>
+                    </a>
                 ))}
             </div>
         </section>
