@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  web:
+    container_name: umt-techgen-web
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      # Map thư mục uploads ra ngoài máy chủ để không mất ảnh khi deploy lại
+      - ./public/uploads:/app/public/uploads
+      # Map file database SQLite ra ngoài (nếu dùng SQLite)
+      - ./prisma:/app/prisma
+    environment:
+      - DATABASE_URL=file:./dev.db
