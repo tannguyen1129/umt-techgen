@@ -109,9 +109,8 @@ export default function RootLayout({
                 <p>© 2025 UMT TechGen. Bản quyền thuộc về Trường Đại học Quản lý và Công nghệ Thành phố Hồ Chí Minh.</p>
                 
                 {/* Credit line - Highlight nhẹ */}
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800/50 border border-slate-700/50 hover:border-blue-900/50 transition group cursor-default">
-                    <Code size={14} className="text-blue-500 group-hover:text-blue-400" />
-                    <span>Website cuộc thi do đội ngũ <span className="text-slate-300 font-medium">Câu lạc bộ Lập trình ứng dụng (APC)</span> xây dựng và vận hành</span>
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800/50 border border-slate-700/50 hover:border-blue-900/50 transition group cursor-default"><Code size={14} className="text-blue-500 group-hover:text-blue-400" />
+                    <span> Website cuộc thi do đội ngũ{" "} <a href="https://www.facebook.com/apc.umt" target="_blank" className="text-slate-300 font-medium hover:text-blue-400 transition" rel="noopener noreferrer">Câu lạc bộ Lập trình ứng dụng (APC)</a>{" "}xây dựng và vận hành</span>
                 </div>
 
                 <Link href="/admin" className="flex items-center gap-1 text-slate-700 hover:text-slate-500 transition-all opacity-10 hover:opacity-100 mt-4">
