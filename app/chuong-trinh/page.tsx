@@ -191,17 +191,17 @@ export default function ProgramPage() {
                 <div className="p-6 border-2 border-slate-100 rounded-xl hover:border-blue-500 transition cursor-default bg-white">
                     <div className="text-3xl md:text-4xl font-extrabold text-blue-600 mb-2">100%</div>
                     <h3 className="font-bold text-slate-800 uppercase tracking-wide text-xs md:text-sm">Học bổng Global</h3>
-                    <p className="text-slate-500 text-xs mt-2">Dành cho giải Đặc biệt</p>
+                    <p className="text-slate-500 text-xs mt-2">01 suất</p>
                 </div>
                 <div className="p-6 border-2 border-slate-100 rounded-xl hover:border-blue-500 transition cursor-default bg-white">
                     <div className="text-3xl md:text-4xl font-extrabold text-blue-500 mb-2">60%</div>
                     <h3 className="font-bold text-slate-800 uppercase tracking-wide text-xs md:text-sm">Học bổng Unique</h3>
-                    <p className="text-slate-500 text-xs mt-2">Dành cho giải Nhất</p>
+                    <p className="text-slate-500 text-xs mt-2">02 suất</p>
                 </div>
                 <div className="p-6 border-2 border-slate-100 rounded-xl hover:border-blue-500 transition cursor-default bg-white">
                     <div className="text-3xl md:text-4xl font-extrabold text-blue-400 mb-2">50%</div>
                     <h3 className="font-bold text-slate-800 uppercase tracking-wide text-xs md:text-sm">Học bổng Liberal</h3>
-                    <p className="text-slate-500 text-xs mt-2">Dành cho giải Nhì</p>
+                    <p className="text-slate-500 text-xs mt-2">02 suất</p>
                 </div>
             </div>
             <p className="mt-6 md:mt-8 text-slate-500 text-xs md:text-sm italic px-4">

@@ -163,7 +163,7 @@ export default function PartnersPage() {
                         <Users size={16} className="md:w-[18px] md:h-[18px]" /> Đơn vị Vận hành hệ thống
                     </div>
                     <h3 className="text-2xl md:text-4xl font-extrabold text-slate-900 mb-4 md:mb-6">
-                        CLB Lập trình ứng dụng (APC)
+                        CLB Lập trình ứng dụng (APC) thuộc <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-700 block md:inline mt-2 md:mt-0">Khoa Công Nghệ</span>
                     </h3>
                     <p className="text-slate-600 leading-relaxed mb-6 md:mb-8 text-sm md:text-lg">
                         Đội ngũ kỹ thuật nòng cốt, chịu trách nhiệm triển khai và vận hành hệ thống chấm thi trực tuyến <strong>UMT Online Judge (UMTOJ)</strong>. APC đảm bảo hệ thống hoạt động ổn định, công bằng và hỗ trợ kỹ thuật xuyên suốt cho thí sinh trong quá trình thi đấu.

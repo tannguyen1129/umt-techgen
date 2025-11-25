@@ -82,7 +82,7 @@ export default function RulesPage() {
               <ul className="space-y-3 text-slate-700 text-sm">
                 <li className="flex gap-2 items-start">
                   <CheckCircle size={16} className="text-teal-600 shrink-0 mt-0.5" />
-                  <span>Dành cho học sinh THPT thuộc các trường hợp còn lại (THPT không Chuyên).</span>
+                  <span>Dành cho học sinh THPT thuộc các trường hợp còn lại.</span>
                 </li>
               </ul>
               <div className="mt-4 flex items-start gap-2 text-xs text-red-700 bg-red-50 p-2 rounded border border-red-100">
@@ -109,7 +109,7 @@ export default function RulesPage() {
                     <FileText size={18}/> 1. Nội dung thi
                 </h3>
                 <p className="text-slate-700 leading-relaxed text-sm md:text-base">
-                    Đề thi bám sát chương trình chuyên Tin, kết hợp kiến thức Toán và Tin học ứng dụng. Đánh giá năng lực tư duy thuật toán, kỹ năng lập trình và khả năng giải quyết vấn đề của thí sinh.
+                    Đề thi bám sát chương trình kết hợp kiến thức Toán học và Tin học ứng dụng. Đánh giá năng lực tư duy thuật toán, kỹ năng lập trình và khả năng giải quyết vấn đề của thí sinh.
                 </p>
              </div>
 
@@ -140,7 +140,7 @@ export default function RulesPage() {
                 <div className="md:w-2/3 text-slate-700 text-sm space-y-2 pl-0 md:pl-2">
                     <div className="flex gap-3"><span className="text-blue-400 font-bold">•</span> <span><strong>Vòng 1:</strong> Từ ngày 30 tháng 11 đến ngày 06 tháng 12 năm 2025</span></div>
                     <div className="flex gap-3"><span className="text-blue-400 font-bold">•</span> <span><strong>Vòng 2:</strong> Từ ngày 15 tháng 12 đến ngày 21 tháng 12 năm 2025</span></div>
-                    <div className="flex gap-3"><span className="text-blue-400 font-bold">•</span> <span><strong>Vòng 3:</strong> Từ ngày 20 tháng 12 đến ngày 25 tháng 12 năm 2025</span></div>
+                    <div className="flex gap-3"><span className="text-blue-400 font-bold">•</span> <span><strong>Vòng 3:</strong> Từ ngày 25 tháng 12 đến ngày 30 tháng 12 năm 2025</span></div>
                 </div>
             </div>
 
@@ -273,10 +273,7 @@ export default function RulesPage() {
             </div>
             <h2 className="text-lg md:text-2xl font-bold text-slate-900">Điều 6: Kinh phí tổ chức</h2>
           </div>
-          <div className="space-y-3 md:space-y-4 text-slate-700 text-sm md:text-base">
-             <p>Nguồn kinh phí hợp pháp từ nguồn ngân sách của Khoa Công Nghệ và Trường Đại học Quản lý và Công nghệ Thành phố Hồ Chí Minh.</p>
-             <p>Kinh phí tổ chức được thực hiện theo kế hoạch sử dụng ngân sách đã được phê duyệt, bao gồm công tác tổ chức, giải thưởng, học bổng và chi phí cho nhân sự hướng dẫn chuyên môn.</p>
-          </div>
+          
         </section>
 
         {/* Điều 7: Quy định khác */}
