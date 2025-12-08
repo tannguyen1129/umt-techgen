@@ -19,7 +19,7 @@ export default function ProgramPage() {
           <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold mb-4 md:mb-6 leading-tight">
             Chương trình & <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-cyan-200">Mục đích</span>
           </h1>
-          <p className="text-blue-100 max-w-3xl mx-auto text-base md:text-xl leading-relaxed px-2">
+          <p className="text-blue-100 max-w-5xl mx-auto text-base md:text-xl leading-relaxed px-2">
             Không chỉ là một kỳ thi, UMT TechGen là hành trình khai phá tiềm năng, nơi kiến thức Toán học và Tin học giao thoa để giải quyết các vấn đề thực tiễn.
           </p>
         </div>
@@ -87,7 +87,7 @@ export default function ProgramPage() {
           <div className="w-full md:w-1/2 space-y-4 md:space-y-6">
              <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Nội dung thi đấu</h2>
              <p className="text-base md:text-lg text-slate-600">
-                Đề thi được xây dựng bám sát chương trình THPT chuyên Tin, nhưng mở rộng với hướng tiếp cận hiện đại:
+                Đề thi được xây dựng bám sát chương trình, mở rộng với hướng tiếp cận hiện đại:
              </p>
              
              <ul className="space-y-4">

@@ -1,94 +1,76 @@
-"use server";
+'use server'
 
-import { PrismaClient } from "@prisma/client";
+// URL Backend (Dùng IP LAN của VPS)
+const API_URL = "http://10.11.10.21:4000/api";
 
-const prisma = new PrismaClient();
-
-// 1. Gửi tin nhắn
+// 1. Gửi liên hệ
 export async function submitContact(formData: FormData) {
-  try {
-    const fullName = formData.get("fullName") as string;
-    const email = formData.get("email") as string;
-    const phone = formData.get("phone") as string;
-    const subject = formData.get("subject") as string;
-    const message = formData.get("message") as string;
+    // Lấy dữ liệu từ form, chấp nhận cả 'fullName' hoặc 'name'
+    const name = formData.get('fullName') || formData.get('name'); 
+    const email = formData.get('email');
+    const phone = formData.get('phone');
+    const message = formData.get('message');
 
-    // Lỗi đỏ ở đây sẽ biến mất sau khi chạy `npx prisma generate`
-    await prisma.contact.create({
-      data: {
-        fullName,
-        email,
-        phone,
-        subject,
-        message,
-      },
-    });
+    if (!name || !email || !message) {
+        return { success: false, message: "Vui lòng điền đầy đủ thông tin bắt buộc (Họ tên, Email, Nội dung)." };
+    }
 
-    return { success: true, message: "Gửi tin nhắn thành công!" };
-  } catch (error) {
-    console.error("Lỗi gửi liên hệ:", error);
-    return { success: false, message: "Lỗi hệ thống, vui lòng thử lại sau." };
-  }
+    try {
+        const res = await fetch(`${API_URL}/contacts`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                name: name.toString(), 
+                email: email.toString(), 
+                phone: phone ? phone.toString() : "", 
+                message: message.toString() 
+            }),
+        });
+
+        if (!res.ok) {
+            const errorData = await res.json().catch(() => ({}));
+            return { success: false, message: errorData.message || "Gửi thất bại, vui lòng thử lại." };
+        }
+
+        return { success: true, message: "Gửi liên hệ thành công!" };
+    } catch (error) {
+        console.error("Lỗi gửi liên hệ:", error);
+        return { success: false, message: "Lỗi kết nối đến máy chủ." };
+    }
 }
 
-// 2. Lấy danh sách tin nhắn (CÓ PHÂN TRANG & LỌC)
-export async function getContacts({ 
-  page = 1, 
-  limit = 10, 
-  status = "ALL", 
-  search = "" 
-}: { 
-  page?: number; 
-  limit?: number; 
-  status?: string; 
-  search?: string; 
-}) {
-  const skip = (page - 1) * limit;
-  
-  const whereClause: any = {};
-  
-  // Lọc theo trạng thái
-  if (status !== "ALL") {
-    whereClause.status = status;
-  }
-
-  // Tìm kiếm theo tên hoặc email
-  if (search) {
-    whereClause.OR = [
-      { fullName: { contains: search } }, // Không dùng mode: 'insensitive' vì SQLite hạn chế
-      { email: { contains: search } },
-    ];
-  }
-
-  const [contacts, total] = await Promise.all([
-    prisma.contact.findMany({
-      where: whereClause,
-      orderBy: { createdAt: "desc" },
-      skip,
-      take: limit,
-    }),
-    prisma.contact.count({ where: whereClause }),
-  ]);
-
-  return {
-    contacts,
-    totalPages: Math.ceil(total / limit),
-    currentPage: page,
-    totalItems: total,
-  };
+// ... (Giữ nguyên các hàm getContacts, deleteContact, updateContact cũ của bạn)
+// Đảm bảo hàm getContacts, deleteContact, updateContact vẫn y hệt như bản bạn gửi trước đó để Admin chạy ngon.
+export async function getContacts({ page = 1, limit = 10, status = 'ALL', search = '' }: any = {}) {
+    try {
+        const queryParams = new URLSearchParams({
+            page: page.toString(),
+            limit: limit.toString(),
+            status: status !== 'ALL' ? status : '',
+            search: search
+        });
+        const res = await fetch(`${API_URL}/contacts?${queryParams.toString()}`, { cache: 'no-store' });
+        if (!res.ok) return { contacts: [], totalPages: 0, totalItems: 0 };
+        return await res.json();
+    } catch (e) {
+        return { contacts: [], totalPages: 0, totalItems: 0 };
+    }
 }
 
-// 3. Cập nhật trạng thái / Trả lời
-export async function updateContact(id: string, data: { status?: string; reply?: string }) {
-  await prisma.contact.update({
-    where: { id },
-    data,
-  });
-  return { success: true };
-}
-
-// 4. Xóa tin nhắn
 export async function deleteContact(id: string) {
-  await prisma.contact.delete({ where: { id } });
-  return { success: true };
+    try {
+        const res = await fetch(`${API_URL}/contacts/${id}`, { method: 'DELETE' });
+        return { success: res.ok };
+    } catch (error) { return { success: false }; }
+}
+
+export async function updateContact(id: string, data: any) {
+    try {
+        const res = await fetch(`${API_URL}/contacts/${id}`, {
+            method: 'PATCH', 
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
+        return { success: res.ok };
+    } catch (error) { return { success: false }; }
 }

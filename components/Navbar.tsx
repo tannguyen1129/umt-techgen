@@ -15,15 +15,20 @@ export default function Navbar() {
         {/* LOGO GROUP */}
         <Link href="/" className="flex items-center gap-2 md:gap-6">
           {/* Logo UMT */}
-          <div className="relative h-9 w-24 sm:h-16 sm:w-48 shrink-0">
-            <Image src="/images/logo-umt.png" alt="UMT" fill className="object-contain object-left" />
-          </div>
+          <div className="relative h-14 w-40 sm:h-24 sm:w-80 shrink-0">
+    <Image
+      src="/images/logo-umt-2dong-xanh.png"
+      alt="UMT"
+      fill
+      className="object-contain object-left"
+    />
+  </div>
           
           {/* Đường kẻ dọc - Hiện luôn trên mọi màn hình */}
           <div className="h-6 w-[1px] bg-slate-300 sm:h-8"></div>
           
           {/* Logo Khoa Công Nghệ - Đã xóa 'hidden' */}
-          <div className="relative h-9 w-28 sm:h-16 sm:w-52 shrink-0">
+          <div className="relative h-6 w-26 sm:h-14 sm:w-50 shrink-0">
             <Image src="/images/sot-xanh.png" alt="KCN" fill className="object-contain object-left" />
           </div>
         </Link>
@@ -35,6 +40,7 @@ export default function Navbar() {
           <Link href="/lich-trinh" className="hover:text-blue-600 transition">Mốc thời gian</Link>
           <Link href="/the-le" className="hover:text-blue-600 transition">Thể lệ</Link>
           <Link href="/doi-tac" className="hover:text-blue-600 transition">Đối tác</Link>
+          <Link href="/thong-bao" className="hover:text-blue-600 transition">Thông báo</Link>
           <Link href="/lien-he" className="hover:text-blue-600 transition">Liên hệ</Link>
         </div>
 
@@ -63,8 +69,8 @@ export default function Navbar() {
             <Link href="/lich-trinh" onClick={() => setIsOpen(false)} className="p-3 hover:bg-blue-50 hover:text-blue-600 rounded-lg font-semibold text-slate-700">Mốc thời gian</Link>
             <Link href="/the-le" onClick={() => setIsOpen(false)} className="p-3 hover:bg-blue-50 hover:text-blue-600 rounded-lg font-semibold text-slate-700">Thể lệ</Link>
             <Link href="/doi-tac" onClick={() => setIsOpen(false)} className="p-3 hover:bg-blue-50 hover:text-blue-600 rounded-lg font-semibold text-slate-700">Đối tác</Link>
+            <Link href="/thong-bao" onClick={() => setIsOpen(false)} className="p-4 bg-blue-50 text-blue-700 rounded-xl font-bold text-lg border-b border-blue-100">Thông báo</Link>
             <Link href="/lien-he" onClick={() => setIsOpen(false)} className="p-3 hover:bg-blue-50 hover:text-blue-600 rounded-lg font-semibold text-slate-700">Liên hệ</Link>
-            
             <Link href="/dang-ky" onClick={() => setIsOpen(false)} className="bg-blue-900 text-center text-white px-6 py-3 rounded-full font-bold hover:bg-blue-800 transition shadow-lg mt-2">
               Đăng ký ngay
             </Link>

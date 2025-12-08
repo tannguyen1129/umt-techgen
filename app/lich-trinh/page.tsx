@@ -8,7 +8,7 @@ export default function TimelinePage() {
       phase: "Giai đoạn 1: Vòng Sơ loại",
       items: [
         {
-          date: "30/11 - 06/12/2025",
+          date: "01/12 - 06/12/2025",
           title: "Vòng Sơ loại 1",
           type: "Online",
           location: "Hệ thống thi trắc nghiệm/Hệ thống UMTOJ",
@@ -24,7 +24,7 @@ export default function TimelinePage() {
           highlight: false,
         },
         {
-          date: "20/12 - 25/12/2025",
+          date: "25/12 - 30/12/2025",
           title: "Vòng Sơ loại 3",
           type: "Online",
           location: "Hệ thống thi trắc nghiệm/Hệ thống UMTOJ",
@@ -112,7 +112,7 @@ export default function TimelinePage() {
         <div className="absolute top-0 right-0 w-48 h-48 md:w-64 md:h-64 bg-white/5 rounded-full blur-3xl -translate-y-10 translate-x-10"></div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <h1 className="text-3xl md:text-5xl font-bold mb-2 md:mb-4">Lộ trình cuộc thi</h1>
-          <p className="text-blue-200 max-w-2xl mx-auto text-base md:text-lg">
+          <p className="text-blue-200 max-w-3xl mx-auto text-base md:text-lg">
             Hành trình chinh phục công nghệ với các mốc thời gian quan trọng dành cho thí sinh.
           </p>
         </div>

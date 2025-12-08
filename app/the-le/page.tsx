@@ -1,4 +1,4 @@
-import { CheckCircle, AlertTriangle, Calendar, MapPin, Award, FileText, ShieldAlert, Info, Users, Monitor, PenTool, DollarSign } from "lucide-react";
+import { CheckCircle, AlertTriangle, Trophy, Clock, Calendar, MapPin, Award, FileText, ShieldAlert, Info, Users, Monitor, PenTool, DollarSign } from "lucide-react";
 
 export default function RulesPage() {
   return (
@@ -63,7 +63,7 @@ export default function RulesPage() {
               <ul className="space-y-3 text-slate-700 text-sm">
                 <li className="flex gap-2 items-start">
                   <CheckCircle size={16} className="text-blue-600 shrink-0 mt-0.5" />
-                  <span>Học sinh có giải thưởng Tin học cấp Tỉnh trở lên (chưa đạt giải Quốc gia).</span>
+                  <span>Học sinh có giải thưởng Tin học cấp Tỉnh (chưa đạt giải Quốc gia).</span>
                 </li>
                 <li className="flex gap-2 items-start">
                   <CheckCircle size={16} className="text-blue-600 shrink-0 mt-0.5" />
@@ -205,65 +205,106 @@ export default function RulesPage() {
         </section>
 
         {/* Điều 5: Quyền lợi & Giải thưởng */}
-        <section className="bg-white rounded-2xl p-5 md:p-8 shadow-sm border border-slate-200">
-          <div className="flex items-center gap-3 mb-4 md:mb-6 border-b border-slate-100 pb-3 md:pb-4">
-            <div className="w-8 h-8 md:w-10 md:h-10 bg-yellow-100 rounded-lg flex items-center justify-center text-yellow-700 shrink-0">
-              <Award size={18} className="md:w-5 md:h-5" />
-            </div>
-            <h2 className="text-lg md:text-2xl font-bold text-slate-900">Điều 5: Giải thưởng</h2>
-          </div>
+<section className="bg-white rounded-2xl p-5 md:p-8 shadow-sm border border-slate-200">
+  <div className="flex items-center gap-3 mb-6 border-b border-slate-100 pb-4">
+    <div className="w-10 h-10 bg-yellow-100 rounded-xl flex items-center justify-center text-yellow-700 shrink-0 shadow-sm">
+      <Award size={20} />
+    </div>
+    <h2 className="text-lg md:text-2xl font-bold text-slate-900">Điều 5: Cơ cấu Giải thưởng</h2>
+  </div>
 
-          {/* Responsive Table: Thêm min-w để có thanh cuộn ngang trên mobile thay vì bị vỡ */}
-          <div className="overflow-x-auto mb-6 md:mb-8 border rounded-lg shadow-sm">
-            <table className="w-full text-sm text-left text-slate-600 min-w-[600px]">
-                <thead className="text-xs text-slate-700 uppercase bg-slate-100 border-b">
-                    <tr>
-                        <th className="px-4 py-3 md:px-6">Giải thưởng</th>
-                        <th className="px-4 py-3 md:px-6 text-center">Bảng A</th>
-                        <th className="px-4 py-3 md:px-6 text-center">Bảng B</th>
-                        <th className="px-4 py-3 md:px-6 text-right">Học bổng (Toàn khóa)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr className="bg-white border-b hover:bg-slate-50">
-                        <td className="px-4 py-3 md:px-6 md:py-4 font-bold text-slate-900">Giải Đặc Biệt</td>
-                        <td colSpan={2} className="px-4 py-3 md:px-6 md:py-4 text-center italic text-slate-500">01 giải chung</td>
-                        <td className="px-4 py-3 md:px-6 md:py-4 text-right font-bold text-blue-600">100% (Global)</td>
-                    </tr>
-                    <tr className="bg-slate-50/50 border-b hover:bg-slate-50">
-                        <td className="px-4 py-3 md:px-6 md:py-4 font-bold">Giải Nhất</td>
-                        <td className="px-4 py-3 md:px-6 md:py-4 text-center">02</td>
-                        <td className="px-4 py-3 md:px-6 md:py-4 text-center">02</td>
-                        <td className="px-4 py-3 md:px-6 md:py-4 text-right font-bold text-blue-500">60% (Unique)</td>
-                    </tr>
-                    <tr className="bg-white border-b hover:bg-slate-50">
-                        <td className="px-4 py-3 md:px-6 md:py-4 font-bold">Giải Nhì</td>
-                        <td className="px-4 py-3 md:px-6 md:py-4 text-center">03</td>
-                        <td className="px-4 py-3 md:px-6 md:py-4 text-center">03</td>
-                        <td className="px-4 py-3 md:px-6 md:py-4 text-right font-bold text-blue-400">50% (Liberal)</td>
-                    </tr>
-                    <tr className="bg-slate-50/50 border-b hover:bg-slate-50">
-                        <td className="px-4 py-3 md:px-6 md:py-4">Giải Ba</td>
-                        <td className="px-4 py-3 md:px-6 md:py-4 text-center">05</td>
-                        <td className="px-4 py-3 md:px-6 md:py-4 text-center">05</td>
-                        <td className="px-4 py-3 md:px-6 md:py-4 text-right text-slate-400">-</td>
-                    </tr>
-                    <tr className="bg-white hover:bg-slate-50">
-                        <td className="px-4 py-3 md:px-6 md:py-4">Khuyến Khích</td>
-                        <td className="px-4 py-3 md:px-6 md:py-4 text-center">10</td>
-                        <td className="px-4 py-3 md:px-6 md:py-4 text-center">10</td>
-                        <td className="px-4 py-3 md:px-6 md:py-4 text-right text-slate-400">-</td>
-                    </tr>
-                </tbody>
-            </table>
-          </div>
+  {/* Table Container: Bo tròn mềm mại, shadow nhẹ */}
+  <div className="overflow-hidden rounded-xl border border-slate-200 shadow-sm mb-8">
+    <div className="overflow-x-auto">
+      <table className="w-full text-sm text-left text-slate-600 min-w-[700px]">
+        {/* Header: Nền xám rất nhạt, chữ hoa nhỏ gọn gàng */}
+        <thead className="text-xs text-slate-500 font-bold uppercase bg-slate-50 border-b border-slate-200">
+          <tr>
+            <th className="px-6 py-4 tracking-wider">Hạng mục giải</th>
+            <th className="px-4 py-4 text-center">Bảng A</th>
+            <th className="px-4 py-4 text-center">Bảng B</th>
+            <th className="px-6 py-4 text-right">Tiền thưởng</th>
+            <th className="px-6 py-4 text-right">Học bổng UMT</th>
+          </tr>
+        </thead>
+        
+        <tbody className="divide-y divide-slate-100">
+          {/* Row: Giải Đặc Biệt - Highlight nền vàng nhạt */}
+          <tr className="bg-gradient-to-r from-yellow-50/60 to-white hover:bg-yellow-50 transition-colors">
+            <td className="px-6 py-4">
+              <span className="flex items-center gap-2 font-bold text-yellow-700 text-base">
+                <Trophy size={16} className="fill-yellow-500 text-yellow-600" /> 
+                Giải Đặc Biệt
+              </span>
+            </td>
+            {/* Merge cột số lượng vì là giải chung */}
+            <td colSpan={2} className="px-4 py-4 text-center italic text-slate-500">
+              01 giải chung
+            </td>
+            <td className="px-6 py-4 text-right font-bold text-slate-800 text-base">
+              10.000.000 VNĐ
+            </td>
+            <td className="px-6 py-4 text-right font-bold text-blue-600">
+              100% (Global)
+            </td>
+          </tr>
 
-          <div className="bg-yellow-50 p-4 md:p-5 rounded-xl text-xs md:text-sm text-slate-700 space-y-2 md:space-y-3 border border-yellow-100">
-            <p className="flex gap-3 items-start"><Info size={16} className="text-yellow-600 shrink-0 mt-0.5"/> <span><strong>Học bổng:</strong> Áp dụng cho toàn khóa học khi trúng tuyển vào Khoa Công nghệ UMT.</span></p>
-            <p className="flex gap-3 items-start"><Info size={16} className="text-yellow-600 shrink-0 mt-0.5"/> <span><strong>Bảo lưu:</strong> Học bổng được bảo lưu tối đa <strong>02 năm</strong> kể từ ngày công bố giải thưởng.</span></p>
-            <p className="flex gap-3 items-start"><Info size={16} className="text-yellow-600 shrink-0 mt-0.5"/> <span><strong>Chứng nhận:</strong> Tất cả thí sinh tham gia vòng chính thức sẽ được cấp Giấy chứng nhận tham gia.</span></p>
-          </div>
-        </section>
+          {/* Row: Giải Nhất */}
+          <tr className="bg-white hover:bg-slate-50 transition-colors">
+            <td className="px-6 py-4 font-semibold text-slate-800">Giải Nhất</td>
+            <td className="px-4 py-4 text-center">02</td>
+            <td className="px-4 py-4 text-center">02</td>
+            <td className="px-6 py-4 text-right font-bold text-slate-700">6.000.000 VNĐ</td>
+            <td className="px-6 py-4 text-right font-bold text-blue-500">60% (Unique)</td>
+          </tr>
+
+          {/* Row: Giải Nhì */}
+          <tr className="bg-white hover:bg-slate-50 transition-colors">
+            <td className="px-6 py-4 font-semibold text-slate-800">Giải Nhì</td>
+            <td className="px-4 py-4 text-center">03</td>
+            <td className="px-4 py-4 text-center">03</td>
+            <td className="px-6 py-4 text-right font-bold text-slate-700">3.000.000 VNĐ</td>
+            <td className="px-6 py-4 text-right font-bold text-blue-400">50% (Liberal)</td>
+          </tr>
+
+          {/* Row: Giải Ba */}
+          <tr className="bg-white hover:bg-slate-50 transition-colors">
+            <td className="px-6 py-4 font-medium text-slate-700">Giải Ba</td>
+            <td className="px-4 py-4 text-center text-slate-500">05</td>
+            <td className="px-4 py-4 text-center text-slate-500">05</td>
+            <td className="px-6 py-4 text-right font-bold text-slate-600">1.000.000 VNĐ</td>
+            <td className="px-6 py-4 text-right text-slate-400">-</td>
+          </tr>
+
+          {/* Row: Giải Khuyến Khích */}
+          <tr className="bg-white hover:bg-slate-50 transition-colors">
+            <td className="px-6 py-4 font-medium text-slate-700">Khuyến Khích</td>
+            <td className="px-4 py-4 text-center text-slate-500">10</td>
+            <td className="px-4 py-4 text-center text-slate-500">10</td>
+            <td className="px-6 py-4 text-right font-bold text-slate-600">500.000 VNĐ</td>
+            <td className="px-6 py-4 text-right text-slate-400">-</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {/* Note Section */}
+  <div className="bg-blue-50/50 p-5 rounded-xl text-sm text-slate-600 space-y-3 border border-blue-100">
+    <p className="flex gap-3 items-start">
+      <Info size={18} className="text-blue-600 shrink-0 mt-0.5"/> 
+      <span><strong>Học bổng:</strong> Áp dụng cho toàn khóa học khi trúng tuyển vào Khoa Công nghệ UMT.</span>
+    </p>
+    <p className="flex gap-3 items-start">
+      <Clock size={18} className="text-blue-600 shrink-0 mt-0.5"/> 
+      <span><strong>Bảo lưu:</strong> Học bổng được bảo lưu tối đa <strong>02 năm</strong> kể từ ngày công bố giải thưởng.</span>
+    </p>
+    <p className="flex gap-3 items-start">
+      <Award size={18} className="text-blue-600 shrink-0 mt-0.5"/> 
+      <span><strong>Chứng nhận:</strong> Tất cả thí sinh tham gia vòng chính thức đều được cấp Giấy chứng nhận (Certificate).</span>
+    </p>
+  </div>
+</section>
 
         {/* Điều 6: Kinh phí tổ chức */}
         <section className="bg-white rounded-2xl p-5 md:p-8 shadow-sm border border-slate-200">

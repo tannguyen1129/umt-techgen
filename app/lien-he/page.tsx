@@ -1,6 +1,6 @@
 "use client";
 
-import { MapPin, Phone, Mail, Send, Facebook, Globe, Loader2, CheckCircle, XCircle, X, ExternalLink, ChevronDown, ChevronUp, HelpCircle } from "lucide-react";
+import { MapPin, Phone, Mail, Send, Facebook, Globe, Loader2, CheckCircle, AlertCircle, X, ExternalLink, ChevronDown, ChevronUp, HelpCircle } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { submitContact } from "@/app/actions/contact";
@@ -8,7 +8,7 @@ import { submitContact } from "@/app/actions/contact";
 const FAQS = [
     {
         question: "Đối tượng nào được tham gia TechGen 2025?",
-        answer: "Tất cả học sinh THPT (lớp 10-12) trên toàn quốc. Có 2 bảng: Bảng A (Chuyên Tin/Đã có giải) và Bảng B (Không chuyên/Đam mê công nghệ)."
+        answer: "Tất cả học sinh THPT (lớp 10-12) trên toàn quốc. Có 2 bảng: Bảng A và Bảng B."
     },
     {
         question: "Lệ phí thi là bao nhiêu?",
@@ -16,7 +16,7 @@ const FAQS = [
     },
     {
         question: "Tôi cần chuẩn bị gì cho vòng Sơ loại?",
-        answer: "Bạn cần máy tính có kết nối Internet ổn định. Thi trực tuyến trên hệ thống UMTOJ với các bài toán tư duy logic và lập trình cơ bản."
+        answer: "Bạn cần máy tính có kết nối Internet ổn định. Thi trực tuyến trên hệ thống UMTOJ với các bài toán tư duy logic và lập trình cơ bản (C++, Python, Java)."
     },
     {
         question: "Cơ cấu giải thưởng như thế nào?",
@@ -24,25 +24,27 @@ const FAQS = [
     }
 ];
 
-// Component Toast Thông báo (Giữ nguyên)
+// --- TOAST COMPONENT ---
 const Toast = ({ message, type, onClose }: { message: string; type: 'success' | 'error'; onClose: () => void }) => {
-  useEffect(() => {
-    const timer = setTimeout(onClose, 3000);
-    return () => clearTimeout(timer);
-  }, [onClose]);
-
-  return (
-    <div className={`fixed top-24 right-4 z-50 flex items-center gap-3 px-6 py-4 rounded-xl shadow-2xl border animate-fade-in-up ${
-      type === 'success' ? 'bg-white border-green-100 text-green-800' : 'bg-white border-red-100 text-red-800'
-    }`}>
-      {type === 'success' ? <CheckCircle size={24} className="text-green-500" /> : <XCircle size={24} className="text-red-500" />}
-      <div>
-        <h4 className="font-bold text-sm">{type === 'success' ? 'Thành công!' : 'Lỗi!'}</h4>
-        <p className="text-sm text-slate-600">{message}</p>
+    useEffect(() => {
+      const timer = setTimeout(onClose, 4000);
+      return () => clearTimeout(timer);
+    }, [onClose]);
+  
+    return (
+      <div className={`fixed top-24 right-4 z-[100] flex items-start gap-3 px-5 py-4 rounded-2xl shadow-xl border animate-in slide-in-from-right-10 duration-300 backdrop-blur-md max-w-sm w-full
+        ${type === 'success' ? 'bg-white/95 border-emerald-100 text-emerald-800 ring-1 ring-emerald-500/10' : 'bg-white/95 border-red-100 text-red-800 ring-1 ring-red-500/10'}
+      `}>
+        <div className={`mt-0.5 p-1.5 rounded-full shrink-0 ${type === 'success' ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'}`}>
+            {type === 'success' ? <CheckCircle size={18} /> : <AlertCircle size={18} />}
+        </div>
+        <div className="flex-1">
+          <h4 className="font-bold text-sm mb-0.5">{type === 'success' ? 'Thành công!' : 'Gửi thất bại!'}</h4>
+          <p className="text-sm opacity-90 leading-snug">{message}</p>
+        </div>
+        <button onClick={onClose} className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-black/5 transition"><X size={16} /></button>
       </div>
-      <button onClick={onClose} className="ml-4 text-slate-400 hover:text-slate-600"><X size={18} /></button>
-    </div>
-  );
+    );
 };
 
 export default function ContactPage() {
@@ -55,11 +57,11 @@ export default function ContactPage() {
     try {
         const res = await submitContact(formData);
         if (res.success) {
-            setToast({ message: "Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi sớm nhất.", type: 'success' });
+            setToast({ message: "Cảm ơn bạn đã liên hệ! BTC sẽ phản hồi sớm nhất qua email.", type: 'success' });
             const form = document.getElementById("contact-form") as HTMLFormElement;
             if (form) form.reset();
         } else {
-            setToast({ message: res.message || "Có lỗi xảy ra.", type: 'error' });
+            setToast({ message: res.message || "Có lỗi xảy ra, vui lòng thử lại.", type: 'error' });
         }
     } catch (error) {
         setToast({ message: "Lỗi kết nối hệ thống.", type: 'error' });
@@ -69,24 +71,24 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen pb-20 font-sans text-slate-600">
+    <div className="bg-slate-50 min-h-screen pb-20 font-sans text-slate-600 relative overflow-x-hidden">
       
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
 
       {/* 1. HERO HEADER */}
-      <div className="bg-blue-900 text-white py-16 md:py-20 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+      <div className="bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white py-20 md:py-24 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px]"></div>
         <div className="container mx-auto px-4 relative z-10 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">Liên hệ Ban Tổ Chức</h1>
-          <p className="text-blue-200 max-w-2xl mx-auto text-lg">
-            Chúng tôi luôn sẵn sàng hỗ trợ giải đáp mọi thắc mắc của thí sinh và phụ huynh về UMT TechGen 2025.
+          <span className="inline-block px-3 py-1 rounded-full bg-white/10 border border-white/20 text-blue-100 text-xs font-bold uppercase tracking-widest mb-4 backdrop-blur-sm">Hỗ trợ 24/7</span>
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight">Liên hệ Ban Tổ Chức</h1>
+          <p className="text-blue-100 max-w-3xl mx-auto text-lg md:text-xl font-light leading-relaxed">
+            Chúng tôi luôn sẵn sàng lắng nghe và giải đáp mọi thắc mắc của bạn về cuộc thi.
           </p>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 -mt-10 relative z-20">
+      <div className="container mx-auto px-4 -mt-16 relative z-20">
         
-        {/* LAYOUT MỚI: Grid 12 cột để chia tỷ lệ chuẩn hơn (5 phần trái / 7 phần phải) */}
         <div className="grid lg:grid-cols-12 gap-8 mb-12">
           
           {/* 2. CỘT TRÁI: THÔNG TIN + SOCIAL (Chiếm 5/12) */}
@@ -128,7 +130,7 @@ export default function ContactPage() {
                                 </div>
                                 <div className="bg-slate-50 p-3 rounded-lg hover:bg-white hover:shadow-md transition border border-transparent hover:border-slate-100">
                                     <p className="text-slate-800 font-bold text-sm">Mr. Sơn Tân</p>
-                                    <p className="text-slate-500 text-[11px] mb-1 uppercase tracking-wide">Phó Ban Tổ chức</p>
+                                    <p className="text-slate-500 text-[11px] mb-1 uppercase tracking-wide">Phó Ban Tổ chức (Liên hệ khẩn cấp)</p>
                                     <a href="tel:0818126177" className="text-green-600 font-bold hover:underline block text-sm">(+84) 818 126 177</a>
                                 </div>
                             </div>

@@ -5,25 +5,25 @@ export default function PartnersPage() {
   // 1. Dữ liệu Đối tác Chiến lược
   // BẠN HÃY ĐIỀN LINK WEBSITE VÀO PHẦN website: "..." NHÉ
   const strategicPartners = [
-    { id: 1, name: "ZaloPay", src: "/images/Zalopay_logo_umt.png", website: "#" },
-    { id: 2, name: "Hội Tin học TP.HCM", src: "/images/hca_hcm.png", website: "#" },
-    { id: 3, name: "SITC", src: "/images/sitc.png", website: "#" },
+    { id: 1, name: "ZaloPay", src: "/images/Zalopay_logo_umt.png", website: "https://zalopay.vn/" },
+    { id: 2, name: "Hội Tin học TP.HCM", src: "/images/hca_hcm.png", website: "https://www.hca.org.vn/" },
+    { id: 3, name: "SITC", src: "/images/sitc.png", website: "https://www.sitc.edu.vn/" },
   ];
 
   // 2. Dữ liệu Đối tác Đồng hành
   const companionPartners = [
-    { id: 4, name: "AIHAY", src: "/images/4_AIHAY.png", website: "#" },
-    { id: 5, name: "THD", src: "/images/5_thd.png", website: "#" },
-    { id: 6, name: "InnoEx", src: "/images/6_innoex.png", website: "#" },
-    { id: 7, name: "IVS", src: "/images/7_ivs.png", website: "#" },
-    { id: 8, name: "Braney", src: "/images/8_braney.png", website: "#" },
-    { id: 9, name: "PVcomBank", src: "/images/9_pvcombank.png", website: "#" },
-    { id: 10, name: "QuickCom", src: "/images/10_quickcom1.png", website: "#" },
-    { id: 11, name: "SoftWorld", src: "/images/11_softworld.png", website: "#" },
-    { id: 12, name: "VietDynamic", src: "/images/12_vietdynamic.png", website: "#" },
-    { id: 13, name: "Vinasa", src: "/images/13_vinasa.png", website: "#" },
-    { id: 14, name: "VNetwork", src: "/images/14_Vnetwork.png", website: "#" },
-    { id: 15, name: "WESET", src: "/images/15_weset.png", website: "#" },
+    { id: 4, name: "Vinasa", src: "/images/13_vinasa.png", website: "https://vinasa.org.vn/" },
+    { id: 5, name: "THD", src: "/images/5_thd.png", website: "https://thdcybersecurity.com/" },
+    { id: 6, name: "InnoEx", src: "/images/6_innoex.png", website: "https://innoex.vn/vi/" },
+    { id: 7, name: "IVS", src: "/images/7_ivs.png", website: "https://indivisys.vn/" },
+    { id: 8, name: "Braney", src: "/images/8_braney.png", website: "https://braney.vn/" },
+    { id: 9, name: "PVcomBank", src: "/images/9_pvcombank.png", website: "https://www.pvcombank.com.vn/" },
+    { id: 10, name: "QuickCom", src: "/images/10_quickcom1.png", website: "https://quickom.net/" },
+    { id: 11, name: "SoftWorld", src: "/images/11_softworld_co.png", website: "https://softworldvietnam.com/" },
+    { id: 12, name: "VietDynamic", src: "/images/12_vietdynamic.png", website: "https://vietdynamic.com.vn/" },
+    { id: 13, name: "AIHAY", src: "/images/4_AIHAY.png", website: "https://ai-hay.vn/" },
+    { id: 14, name: "VNetwork", src: "/images/14_Vnetwork.png", website: "https://www.vnetwork.vn/" },
+    { id: 15, name: "WESET", src: "/images/15_weset.png", website: "https://weset.edu.vn/" },
   ];
 
   return (
@@ -44,8 +44,11 @@ export default function PartnersPage() {
             <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-white mb-4 md:mb-6 tracking-tight leading-tight">
                 Đơn vị Tổ chức & <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-cyan-200 block md:inline mt-2 md:mt-0">Đồng hành</span>
             </h1>
-            <p className="text-blue-100/90 text-base md:text-xl max-w-3xl mx-auto leading-relaxed font-light px-2">
-                Sự thành công của cuộc thi được kiến tạo bởi sự hợp tác chặt chẽ giữa các đơn vị uy tín hàng đầu, cùng chung sứ mệnh ươm mầm tài năng công nghệ trẻ.
+            <p className="text-blue-100/90 text-base md:text-xl max-w-5xl mx-auto leading-relaxed font-light px-2 text-center">
+               Sự thành công của cuộc thi được kiến tạo bởi sự hợp tác chặt chẽ giữa các đơn vị uy tín hàng đầu, 
+               {/* Thẻ này sẽ ngắt dòng trên PC, nhưng ẩn đi trên Mobile để chữ chảy tự nhiên */}
+               <br className="hidden md:inline" />
+               cùng chung sứ mệnh ươm mầm tài năng công nghệ trẻ.
             </p>
         </div>
         <div className="absolute bottom-0 left-0 w-full h-8 md:h-16 bg-gradient-to-t from-white to-transparent"></div>

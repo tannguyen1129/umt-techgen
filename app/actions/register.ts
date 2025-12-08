@@ -1,123 +1,141 @@
-"use server";
+'use server'
 
-import { PrismaClient } from "@prisma/client";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
+// Địa chỉ gốc của API Backend
+const API_BASE = "http://10.11.10.21:4000/api";
 
-const prisma = new PrismaClient();
-
+// 1. Đăng ký thí sinh
 export async function registerCandidate(formData: FormData) {
   try {
-    // 1. Lấy dữ liệu text
-    const fullName = formData.get("fullName") as string;
-    const dob = formData.get("dob") as string;
-    const gender = formData.get("gender") as string;
-    const cccd = formData.get("cccd") as string;
-    const phone = formData.get("phone") as string;
-    const email = formData.get("email") as string;
-    const school = formData.get("school") as string;
-    const province = formData.get("province") as string;
-    const grade = formData.get("grade") as string;
-    const className = formData.get("className") as string;
-    const studentId = formData.get("studentId") as string || "";
-    const table = formData.get("table") as string;
-    const achievements = formData.get("achievements") as string || "";
-
-    // 2. Xử lý lưu file (3 file: CCCD Trước, Sau, Thẻ HS)
-    const cccdFrontFile = formData.get("cccdFrontFile") as File;
-    const cccdBackFile = formData.get("cccdBackFile") as File; // Mới
-    const studentCardFile = formData.get("studentCardFile") as File;
-
-    let cccdPath = "";
-    let cccdBackPath = ""; // Mới
-    let studentCardPath = "";
-
-    // Hàm save file local
-    const saveFile = async (file: File, prefix: string) => {
-      if (!file || file.size === 0) return "";
-      
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-      
-      const uploadDir = join(process.cwd(), "public", "uploads");
-      try {
-        await mkdir(uploadDir, { recursive: true });
-      } catch (e) {}
-
-      // Thêm timestamp để tên file không trùng
-      const fileName = `${prefix}-${Date.now()}-${file.name.replace(/\s/g, "_")}`;
-      const filePath = join(uploadDir, fileName);
-      
-      await writeFile(filePath, buffer);
-      return `/uploads/${fileName}`;
-    };
-
-    if (cccdFrontFile) cccdPath = await saveFile(cccdFrontFile, "cccd_front");
-    if (cccdBackFile) cccdBackPath = await saveFile(cccdBackFile, "cccd_back"); // Lưu mặt sau
-    if (studentCardFile) studentCardPath = await saveFile(studentCardFile, "card");
-
-    // 3. Lưu vào Database
-    const newCandidate = await prisma.candidate.create({
-      data: {
-        fullName, dob, gender, cccd, phone, email,
-        school, province, grade, className, studentId,
-        table, achievements,
-        cccdPath, 
-        cccdBackPath,
-        studentCardPath,
-        status: "PENDING"
-      },
+    // PHẢI THÊM /candidates VÀO SAU API_BASE
+    const res = await fetch(`${API_BASE}/candidates`, { 
+      method: 'POST',
+      body: formData,
+      // @ts-ignore
+      duplex: 'half', // Bắt buộc để gửi file
     });
 
-    return { success: true, message: "Đăng ký thành công!", id: newCandidate.id };
+    const result = await res.json();
 
+    if (!res.ok) {
+        return { success: false, message: result.message || result.error || "Lỗi đăng ký" };
+    }
+
+    return { success: true, message: "Đăng ký thành công!" };
   } catch (error) {
-    console.error("Lỗi đăng ký:", error);
-    return { success: false, message: "Lỗi hệ thống, vui lòng thử lại sau." };
+    console.error("Lỗi gọi Backend:", error);
+    return { success: false, message: "Lỗi kết nối server" };
   }
 }
 
-// Action Admin giữ nguyên
-export async function updateStatus(id: string, status: string) {
-    await prisma.candidate.update({
-        where: { id },
-        data: { status }
+// 2. Lấy danh sách thí sinh (Thêm tham số status)
+export async function getCandidates({ page, limit, table, status }: any) {
+  try {
+    // Thêm &status=${status} vào URL
+    const res = await fetch(`${API_BASE}/candidates?page=${page}&limit=${limit}&table=${table}&status=${status}`, { 
+        cache: 'no-store' 
+    });
+    
+    if (!res.ok) return { candidates: [], totalItems: 0, totalPages: 0 };
+    return await res.json();
+  } catch (e) {
+    return { candidates: [], totalItems: 0, totalPages: 0 };
+  }
+}
+
+// 3. Cập nhật trạng thái (Thêm tham số note)
+export async function updateStatus(id: string, status: string, note: string = "") {
+  try {
+    await fetch(`${API_BASE}/candidates/${id}/status`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status, note }) // Gửi cả note lên
     });
     return { success: true };
+  } catch (error) {
+    return { success: false };
+  }
 }
 
-// Action cho Admin: Lấy danh sách (CÓ PHÂN TRANG & LỌC)
-export async function getCandidates({
-  page = 1,
-  limit = 10,
-  table = "ALL"
-}: {
-  page?: number;
-  limit?: number;
-  table?: string;
-} = {}) {
-  const skip = (page - 1) * limit;
-  const whereClause: any = {};
+// 4. Xóa thí sinh
+export async function deleteCandidate(id: string) {
+  try {
+    // Gọi method DELETE
+    const res = await fetch(`${API_BASE}/candidates/${id}`, {
+      method: 'DELETE',
+    });
 
-  // Lọc theo bảng thi
-  if (table !== "ALL") {
-    whereClause.table = table;
+    if (!res.ok) {
+        // Có thể đọc lỗi từ server nếu cần
+        return { success: false, message: "Không thể xóa hồ sơ" };
+    }
+    
+    return { success: true, message: "Xóa thành công" };
+  } catch (error) {
+    console.error("Lỗi xóa thí sinh:", error);
+    return { success: false, message: "Lỗi kết nối server" };
   }
+}
 
-  const [candidates, total] = await Promise.all([
-    prisma.candidate.findMany({
-      where: whereClause,
-      orderBy: { createdAt: 'desc' },
-      skip,
-      take: limit,
-    }),
-    prisma.candidate.count({ where: whereClause }),
-  ]);
+// 5. Lấy dữ liệu thống kê Dashboard
+export async function getDashboardStats() {
+  try {
+    // Gọi vào route /candidates/statistics mà ta vừa tạo ở Backend
+    const res = await fetch(`${API_BASE}/candidates/statistics`, { 
+        cache: 'no-store', // Không cache để số liệu luôn mới
+        next: { revalidate: 0 }
+    });
+    
+    if (!res.ok) {
+        console.error("Lỗi API Stats:", res.status, res.statusText);
+        return null;
+    }
 
-  return {
-    candidates,
-    totalPages: Math.ceil(total / limit),
-    currentPage: page,
-    totalItems: total,
-  };
+    return await res.json();
+  } catch (error) {
+    console.error("Lỗi kết nối lấy thống kê:", error);
+    return null;
+  }
+}
+
+// 6. Cập nhật riêng ghi chú (Không đổi trạng thái)
+export async function updateNoteOnly(id: string, note: string) {
+  try {
+    // Tận dụng API updateStatus nhưng giữ nguyên status cũ hoặc gửi 1 flag riêng
+    // Tuy nhiên, cách tốt nhất là Backend nên hỗ trợ PATCH note.
+    // Nếu Backend chưa có, ta dùng lại updateStatus với logic: gửi kèm status hiện tại
+    // Nhưng ở đây để đơn giản, mình giả định dùng chung endpoint updateStatus
+    // Bạn cần đảm bảo Backend không reset status nếu status gửi lên là null/undefined hoặc giữ nguyên.
+    
+    // Cách an toàn nhất với code backend hiện tại:
+    // Gọi API updateStatus với status="CURRENT_STATUS" (Cần xử lý ở UI để truyền status cũ vào)
+    // HOẶC: Tạo 1 server action gọi fetch PUT
+    
+    await fetch(`${API_BASE}/candidates/${id}/status`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ note }) // Chỉ gửi note, Backend cần xử lý nếu thiếu status thì giữ nguyên
+    });
+    return { success: true };
+  } catch (error) {
+    return { success: false };
+  }
+}
+
+// 7. Cập nhật thông tin thí sinh (Edit Info)
+export async function updateCandidateInfo(id: string, data: any) {
+  try {
+    const res = await fetch(`${API_BASE}/candidates/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+        return { success: false, message: "Lỗi cập nhật server" };
+    }
+    return { success: true, message: "Cập nhật thành công!" };
+  } catch (error) {
+    console.error("Lỗi update info:", error);
+    return { success: false, message: "Lỗi kết nối" };
+  }
 }
