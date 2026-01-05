@@ -6,6 +6,20 @@ const API_BASE = "http://10.11.10.21:4000/api";
 // 1. Đăng ký thí sinh
 export async function registerCandidate(formData: FormData) {
   try {
+    // --- ĐOẠN CODE DEBUG QUAN TRỌNG ---
+    const file = formData.get('studentCardFile') as File;
+    console.log("------------------------------------------------");
+    console.log("Server Action nhận được request đăng ký:");
+    console.log("- Tên thí sinh:", formData.get('fullName'));
+    
+    if (file && file.size > 0) {
+        console.log("- Ảnh thẻ:", file.name, "| Kích thước:", file.size, "bytes", "| Type:", file.type);
+    } else {
+        console.error("!!! CẢNH BÁO: Không tìm thấy file ảnh hoặc file rỗng !!!");
+    }
+    console.log("------------------------------------------------");
+    // ----------------------------------
+
     // PHẢI THÊM /candidates VÀO SAU API_BASE
     const res = await fetch(`${API_BASE}/candidates`, { 
       method: 'POST',
@@ -17,6 +31,7 @@ export async function registerCandidate(formData: FormData) {
     const result = await res.json();
 
     if (!res.ok) {
+        console.error("Backend trả về lỗi:", result); // Log lỗi từ backend trả về
         return { success: false, message: result.message || result.error || "Lỗi đăng ký" };
     }
 
@@ -28,17 +43,36 @@ export async function registerCandidate(formData: FormData) {
 }
 
 // 2. Lấy danh sách thí sinh (Thêm tham số status)
-export async function getCandidates({ page, limit, table, status }: any) {
+export async function getCandidates({ 
+  page = 1, 
+  limit = 10, 
+  table = "ALL", 
+  status = "ALL",
+  fromDate = "",  // <-- Thêm
+  toDate = ""     // <-- Thêm
+}: any) {
   try {
-    // Thêm &status=${status} vào URL
-    const res = await fetch(`${API_BASE}/candidates?page=${page}&limit=${limit}&table=${table}&status=${status}`, { 
-        cache: 'no-store' 
+    // Xây dựng URL query string
+    const params = new URLSearchParams({
+      page: page.toString(),
+      limit: limit.toString(),
+      table,
+      status,
     });
-    
-    if (!res.ok) return { candidates: [], totalItems: 0, totalPages: 0 };
+
+    // Chỉ push vào nếu có dữ liệu
+    if (fromDate) params.append("fromDate", fromDate);
+    if (toDate) params.append("toDate", toDate);
+
+    const res = await fetch(`${API_BASE}/candidates?${params.toString()}`, { 
+      cache: 'no-store' 
+    });
+
+    if (!res.ok) return { candidates: [], totalPages: 0, totalItems: 0 };
     return await res.json();
-  } catch (e) {
-    return { candidates: [], totalItems: 0, totalPages: 0 };
+  } catch (error) {
+    console.error(error);
+    return { candidates: [], totalPages: 0, totalItems: 0 };
   }
 }
 

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { ArrowRight, Trophy, Users, Star, Sparkles, Calendar } from "lucide-react";
+import { ArrowRight, Trophy, Users, Star, Sparkles, Calendar, Zap, BellRing } from "lucide-react"; // Import thêm icon
 import RunningText from '@/components/RunningText';
 
 export default function Home() {
@@ -21,14 +21,41 @@ export default function Home() {
     "/images/umt-06.jpg",
   ];
 
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [dynamicDateText, setDynamicDateText] = useState("");
 
   useEffect(() => {
+    // Slideshow
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
-    }, 3000);
+    }, 1000);
+
+    // Logic ngày
+    const now = new Date();
+    const deadline = new Date("2026-01-15T23:59:59");
+    const displayDate = now < deadline ? now : deadline;
+    const d = displayDate.getDate();
+    const m = displayDate.getMonth() + 1;
+    const y = displayDate.getFullYear();
+    setDynamicDateText(`${d} tháng ${m} năm ${y}`);
+
     return () => clearInterval(interval);
   }, [heroImages.length]);
+
+  // Nội dung chữ chạy (Tách ra biến để dùng lại cho việc nhân đôi)
+  const marqueeContent = (
+    <div className="flex items-center gap-4 mx-4 md:mx-8">
+        <span className="flex items-center gap-2 text-yellow-300 font-black uppercase tracking-wider text-sm md:text-base whitespace-nowrap">
+            <BellRing className="w-5 h-5 animate-bounce" /> THÔNG BÁO:
+        </span>
+        <span className="text-white font-bold text-sm md:text-lg whitespace-nowrap">
+            Đến ngày <span className="text-yellow-300 underline decoration-2 underline-offset-4">{dynamicDateText}</span> Kỳ thi TechGen 2025 vẫn nhận đơn đăng ký
+        </span>
+        <span className="flex items-center gap-1 text-white/90 text-sm md:text-base italic whitespace-nowrap">
+             — <Zap className="w-4 h-4 text-yellow-400 fill-yellow-400"/> Nhanh tay đăng ký tranh tài để giành các giải thưởng hấp dẫn với tổng giải thưởng hơn 100 triệu đồng! 
+        </span>
+    </div>
+  );
 
   // DATA ĐỐI TÁC
   const strategicPartners = [
@@ -40,17 +67,21 @@ export default function Home() {
 
   const companionPartners = [
     { id: 4, name: "Vinasa", src: "/images/13_vinasa.png", website: "https://vinasa.org.vn/" },
-    { id: 5, name: "THD", src: "/images/5_thd.png", website: "https://thdcybersecurity.com/" },
-    { id: 6, name: "InnoEx", src: "/images/6_innoex.png", website: "https://innoex.vn/vi/" },
-    { id: 7, name: "IVS", src: "/images/7_ivs.png", website: "https://indivisys.vn/" },
-    { id: 8, name: "Braney", src: "/images/8_braney.png", website: "https://braney.vn/" },
-    { id: 9, name: "PVcomBank", src: "/images/9_pvcombank.png", website: "https://www.pvcombank.com.vn/" },
-    { id: 10, name: "QuickCom", src: "/images/10_quickcom1.png", website: "https://quickom.net/" },
-    { id: 11, name: "SoftWorld", src: "/images/11_softworld_co.png", website: "https://softworldvietnam.com/" },
-    { id: 12, name: "VietDynamic", src: "/images/12_vietdynamic.png", website: "https://vietdynamic.com.vn/" },
-    { id: 13, name: "AIHAY", src: "/images/4_AIHAY.png", website: "https://ai-hay.vn/" },
-    { id: 14, name: "VNetwork", src: "/images/14_Vnetwork.png", website: "https://www.vnetwork.vn/" },
-    { id: 15, name: "WESET", src: "/images/15_weset.png", website: "https://weset.edu.vn/" },
+    { id: 5, name: "VNPT", src: "/images/vnpt-1.png", website: "https://vinhlong.vnpt.vn/" },
+    { id: 6, name: "Vinaphone", src: "/images/vinaphone.png", website: "https://vinhlong.vnpt.vn/" },
+    { id: 7, name: "BytePlus", src: "/images/BytePlus_Company_Logo.png", website: "https://www.byteplus.com/en" },
+    { id: 8, name: "Đoàn Thanh Niên", src: "/images/logo-doan-thanh-nien.png", website: "https://www.facebook.com/profile.php?id=61582599270594" },
+    { id: 9, name: "THD", src: "/images/5_thd.png", website: "https://thdcybersecurity.com/" },
+    { id: 10, name: "InnoEx", src: "/images/6_innoex.png", website: "https://innoex.vn/vi/" },
+    { id: 11, name: "IVS", src: "/images/7_ivs.png", website: "https://indivisys.vn/" },
+    { id: 12, name: "Braney", src: "/images/8_braney.png", website: "https://braney.vn/" },
+    { id: 13, name: "PVcomBank", src: "/images/9_pvcombank.png", website: "https://www.pvcombank.com.vn/" },
+    { id: 14, name: "QuickCom", src: "/images/10_quickcom1.png", website: "https://quickom.net/" },
+    { id: 15, name: "SoftWorld", src: "/images/11_softworld_co.png", website: "https://softworldvietnam.com/" },
+    { id: 16, name: "VietDynamic", src: "/images/12_vietdynamic.png", website: "https://vietdynamic.com.vn/" },
+    { id: 17, name: "AIHAY", src: "/images/4_AIHAY.png", website: "https://ai-hay.vn/" },
+    { id: 18, name: "VNetwork", src: "/images/14_Vnetwork.png", website: "https://www.vnetwork.vn/" },
+    { id: 19, name: "WESET", src: "/images/15_weset.png", website: "https://weset.edu.vn/" },
   ];
 
   return (
@@ -64,6 +95,30 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 w-[200px] md:w-[400px] h-[200px] md:h-[400px] bg-indigo-500/10 rounded-full blur-[40px] md:blur-[80px] -z-10 -translate-x-1/4 translate-y-1/4"></div>
 
         <div className="container mx-auto px-4">
+
+            {/* --- 2. THÊM MỚI: DÒNG CHỮ CHẠY (TICKER) --- */}
+            <div className="relative z-30 max-w-5xl mx-auto mb-8 md:mb-12">
+                <div className="relative overflow-hidden rounded-xl md:rounded-full bg-gradient-to-r from-red-600 via-orange-600 to-red-600 shadow-xl shadow-orange-500/30 border-2 border-white/20">
+                    
+                    <div className="flex py-3 md:py-4 w-full overflow-hidden group">
+                        
+                        {/* THAY ĐỔI: Thêm class [animation-duration:20s] để ghi đè thời gian 40s mặc định.
+                            Số càng nhỏ chạy càng nhanh.
+                        */}
+                        <div className="flex min-w-full shrink-0 animate-marquee items-center justify-around group-hover:[animation-play-state:paused] [animation-duration:20s]">
+                            {marqueeContent}
+                        </div>
+
+                        <div className="flex min-w-full shrink-0 animate-marquee items-center justify-around group-hover:[animation-play-state:paused] [animation-duration:20s]" aria-hidden="true">
+                            {marqueeContent}
+                        </div>
+
+                    </div>
+                    
+                    {/* Hiệu ứng bóng kính */}
+                    <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/20 to-transparent pointer-events-none"></div>
+                </div>
+            </div>
             
             {/* --- PHẦN NHÀ TÀI TRỢ --- */}
             <div className="relative z-20 mb-8 md:mb-12 animate-fade-in-down">

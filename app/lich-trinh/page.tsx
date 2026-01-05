@@ -1,8 +1,26 @@
 import { Calendar, MapPin, Video, Monitor, Star, Award } from "lucide-react";
+import React from "react";
+
+// 1. CẬP NHẬT INTERFACE: date chấp nhận cả string và ReactNode
+interface TimelineItem {
+  date: string | React.ReactNode; 
+  title: string;
+  type: string;
+  location: string;
+  desc: string;
+  highlight: boolean;
+  isCancelled?: boolean;
+  icon?: React.ReactNode;
+}
+
+interface TimelinePhase {
+  id: number;
+  phase: string;
+  items: TimelineItem[];
+}
 
 export default function TimelinePage() {
-  // Dữ liệu đã được lọc bỏ các phần nội bộ BTC & Tách lẻ vòng sơ loại
-  const events = [
+  const events: TimelinePhase[] = [
     {
       id: 1,
       phase: "Giai đoạn 1: Vòng Sơ loại",
@@ -16,7 +34,17 @@ export default function TimelinePage() {
           highlight: false,
         },
         {
-          date: "15/12 - 21/12/2025",
+          // 2. SỬA DỮ LIỆU VÒNG 2: Hiển thị 2 dòng ngày
+          date: (
+            <div className="flex flex-col items-center md:items-end gap-0.5">
+                <span className="text-[10px] md:text-xs line-through opacity-60 font-normal text-slate-500">
+                    15/12 - 24/12/2025
+                </span>
+                <span className="text-red-600 font-bold text-xs md:text-sm">
+                    14:00 - 16:00, 28/12/2025
+                </span>
+            </div>
+          ),
           title: "Vòng Sơ loại 2",
           type: "Online",
           location: "Hệ thống thi trắc nghiệm/Hệ thống UMTOJ",
@@ -30,6 +58,7 @@ export default function TimelinePage() {
           location: "Hệ thống thi trắc nghiệm/Hệ thống UMTOJ",
           desc: "Đợt sơ loại cuối cùng chốt danh sách vào vòng trong.",
           highlight: false,
+          isCancelled: true,
         },
       ],
     },
@@ -138,20 +167,30 @@ export default function TimelinePage() {
                   {phase.items.map((item, index) => (
                     <div key={index} className="relative flex flex-col md:flex-row gap-4 md:gap-6 group items-start"> 
                       
-                      {/* 1. CỘT NGÀY THÁNG (Responsive: Flex order thay đổi hoặc style riêng) */}
-                      {/* Mobile: Full width width margin bottom. Desktop: Width cố định, text right */}
+                      {/* 1. CỘT NGÀY THÁNG */}
                       <div className="w-full md:w-48 md:text-right shrink-0 md:mt-1"> 
-                        <div className="inline-flex items-center gap-2 text-blue-700 font-bold bg-blue-50 border border-blue-100 px-3 py-2 rounded-lg shadow-sm whitespace-nowrap w-full md:w-auto justify-center md:justify-end">
+                        <div className={`inline-flex items-center gap-2 font-bold px-3 py-2 rounded-lg shadow-sm whitespace-nowrap w-full md:w-auto justify-center md:justify-end border
+                            ${item.isCancelled 
+                                ? 'bg-slate-100 text-slate-400 border-slate-200 line-through decoration-slate-400' 
+                                : 'text-blue-700 bg-blue-50 border-blue-100' 
+                            }
+                        `}>
                             <Calendar size={16} className="shrink-0" />
-                            <span className="text-sm">{item.date}</span>
+                            {/* 3. CẬP NHẬT RENDER: Đổi span thành div để chứa nội dung phức tạp */}
+                            <div className="text-sm">{item.date}</div>
                         </div>
                       </div>
 
                       {/* 2. TRỤC GIỮA (Hidden on Mobile) */}
                       <div className="hidden md:flex flex-col items-center relative self-stretch mx-2">
                         {/* Dot */}
-                        <div className={`w-4 h-4 rounded-full border-2 z-10 mt-3 bg-white transition-all duration-300 group-hover:scale-125
-                            ${item.highlight ? 'border-orange-500 ring-4 ring-orange-100' : 'border-blue-500 ring-4 ring-blue-50'}
+                        <div className={`w-4 h-4 rounded-full border-2 z-10 mt-3 transition-all duration-300 group-hover:scale-125
+                            ${item.isCancelled
+                                ? 'bg-slate-200 border-slate-300 ring-4 ring-slate-50' 
+                                : item.highlight 
+                                    ? 'bg-white border-orange-500 ring-4 ring-orange-100' 
+                                    : 'bg-white border-blue-500 ring-4 ring-blue-50'
+                            }
                         `}></div>
                         
                         {/* Line nối */}
@@ -161,31 +200,44 @@ export default function TimelinePage() {
                       </div>
 
                       {/* 3. NỘI DUNG */}
-                      <div className={`flex-1 bg-white p-5 md:p-6 rounded-2xl border transition-all duration-300 hover:shadow-lg relative w-full
-                          ${item.highlight ? 'border-orange-200 shadow-orange-50' : 'border-slate-200 shadow-sm'}
+                      <div className={`flex-1 p-5 md:p-6 rounded-2xl border transition-all duration-300 hover:shadow-lg relative w-full
+                          ${item.isCancelled 
+                            ? 'bg-slate-50 border-slate-200 shadow-none opacity-60 grayscale' 
+                            : item.highlight 
+                                ? 'bg-white border-orange-200 shadow-orange-50 shadow-sm' 
+                                : 'bg-white border-slate-200 shadow-sm'
+                          }
                       `}>
                         {/* Mũi tên chỉ vào timeline (Desktop only) */}
-                        <div className={`hidden md:block absolute top-4 -left-2 w-4 h-4 bg-white border-l border-b transform rotate-45
-                            ${item.highlight ? 'border-orange-200' : 'border-slate-200'}
+                        <div className={`hidden md:block absolute top-4 -left-2 w-4 h-4 border-l border-b transform rotate-45
+                            ${item.isCancelled 
+                                ? 'bg-slate-50 border-slate-200' 
+                                : item.highlight ? 'bg-white border-orange-200' : 'bg-white border-slate-200'
+                            }
                         `}></div>
 
                         <div className="flex flex-col sm:flex-row justify-between items-start mb-3 gap-2">
                           <div className="flex items-center gap-3">
                             {item.icon ? item.icon : (
-                                <div className={`w-2 h-2 rounded-full shrink-0 ${item.highlight ? 'bg-orange-500' : 'bg-blue-500'}`}></div>
+                                <div className={`w-2 h-2 rounded-full shrink-0 
+                                    ${item.isCancelled ? 'bg-slate-400' : (item.highlight ? 'bg-orange-500' : 'bg-blue-500')}
+                                `}></div>
                             )}
-                            <h3 className={`text-lg md:text-xl font-bold leading-tight ${item.highlight ? 'text-slate-900' : 'text-slate-800'}`}>
+                            <h3 className={`text-lg md:text-xl font-bold leading-tight 
+                                ${item.isCancelled ? 'text-slate-500 line-through decoration-2 decoration-slate-400' : (item.highlight ? 'text-slate-900' : 'text-slate-800')}
+                            `}>
                                 {item.title}
                             </h3>
                           </div>
                           
-                          {/* Type Badge - Responsive size */}
+                          {/* Type Badge */}
                           <span className={`text-[10px] uppercase font-bold px-2 py-1 rounded border tracking-wide shrink-0 self-start sm:self-auto ${
+                            item.isCancelled ? 'bg-slate-200 text-slate-500 border-slate-300' : 
                             item.type === 'Online' ? 'bg-green-50 text-green-700 border-green-100' :
                             item.type === 'Training' ? 'bg-purple-50 text-purple-700 border-purple-100' :
                             'bg-yellow-50 text-yellow-700 border-yellow-100'
                           }`}>
-                            {item.type}
+                            {item.isCancelled ? 'Đã đóng' : item.type}
                           </span>
                         </div>
 

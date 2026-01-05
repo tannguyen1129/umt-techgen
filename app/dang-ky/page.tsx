@@ -121,8 +121,7 @@ export default function RegistrationPage() {
         // COPY Y CHANG CẤU HÌNH TỪ BACKEND SANG (Thêm +07:00)
         const rounds = [
             { id: 1, start: new Date('2025-10-01T00:00:00+07:00'), end: new Date('2025-11-30T23:59:59+07:00') },
-            { id: 2, start: new Date('2025-12-04T14:15:00+07:00'), end: new Date('2025-12-12T23:59:59+07:00') },
-            { id: 3, start: new Date('2025-12-17T00:00:00+07:00'), end: new Date('2025-12-23T23:59:59+07:00') }
+            { id: 2, start: new Date('2025-12-04T14:15:00+07:00'), end: new Date('2026-01-15T23:59:59+07:00') }
         ];
 
         const activeRound = rounds.find(r => now >= r.start && now <= r.end);
@@ -135,8 +134,6 @@ export default function RegistrationPage() {
                  setCloseMessage("Cổng đăng ký chưa mở.");
             } else if (now > rounds[0].end && now < rounds[1].start) {
                  setCloseMessage("Thời gian đăng ký vòng Sơ loại 1 đã kết thúc. Thời gian đăng kỳ vòng Sơ loại 2 sẽ mở vào ngày 03/12/2025.");
-            } else if (now > rounds[1].end && now < rounds[2].start) {
-                 setCloseMessage("Thời gian đăng ký vòng Sơ loại 2 đã kết thúc. Thời gian đăng kỳ vòng Sơ loại 3 sẽ mở vào ngày 17/12/2025.");
             } else {
                  setCloseMessage("Thời gian đăng ký tham gia cuộc thi đã kết thúc.");
             }
@@ -229,12 +226,12 @@ export default function RegistrationPage() {
                         <li className="flex justify-between items-center">
                             <span className="font-bold">Vòng 2:</span> 
                             <span className={new Date() > new Date('2025-12-12') ? "text-slate-400 line-through" : "text-blue-700 font-bold"}>
-                                03/12 - 12/12
+                                03/12 - 17/12
                             </span>
                         </li>
                         <li className="flex justify-between items-center">
                             <span className="font-bold">Vòng 3:</span> 
-                            <span className="text-orange-600 font-bold">17/12 - 23/12</span>
+                            <span className="text-orange-600 font-bold">20/12 - 27/12</span>
                         </li>
                     </ul>
                 </div>

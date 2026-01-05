@@ -1,33 +1,34 @@
 "use client";
 
 import { useState } from "react";
-import { loginAdmin } from "@/app/actions/auth";
+import { loginAdmin } from "@/app/actions/auth"; 
 import { useRouter } from "next/navigation";
 import { Lock, User, ArrowRight, Loader2, ShieldCheck, AlertCircle } from "lucide-react";
-import Image from "next/image";
 
 export default function LoginPage() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  // Hàm này nhận 1 tham số (formData) để gọi Server Action
   const handleSubmit = async (formData: FormData) => {
     setIsLoading(true);
     setError("");
     
     try {
-        // Gọi hàm loginAdmin chỉ với formData (đã fix lỗi Type)
+        // Gọi Server Action loginAdmin
         const res = await loginAdmin(formData);
         
         if (res.success) {
+          // Đăng nhập thành công -> Cookie (Token + Role) đã được lưu -> Chuyển hướng
           router.push("/admin"); 
+          // Có thể dùng router.refresh() để đảm bảo middleware nhận cookie mới ngay lập tức
+          router.refresh(); 
         } else {
-          setError(res.message || "Lỗi đăng nhập");
+          setError(res.message || "Tài khoản hoặc mật khẩu không đúng");
           setIsLoading(false);
         }
     } catch (e) {
-        setError("Lỗi kết nối đến hệ thống");
+        setError("Lỗi kết nối đến hệ thống. Vui lòng thử lại sau.");
         setIsLoading(false);
     }
   };
@@ -35,10 +36,9 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-slate-50 p-4 md:p-0">
       
-      {/* Main Card */}
       <div className="bg-white rounded-3xl shadow-2xl overflow-hidden w-full max-w-5xl flex flex-col md:flex-row min-h-[600px] animate-in fade-in duration-500">
         
-        {/* Left Side: Banner & Info */}
+        {/* Left Side: Banner */}
         <div className="w-full md:w-1/2 bg-gradient-to-br from-blue-900 to-blue-700 p-8 md:p-12 flex flex-col justify-between relative overflow-hidden text-white">
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
             <div className="relative z-10">
@@ -56,6 +56,11 @@ export default function LoginPage() {
                     Truy cập dashboard để quản lý hồ sơ thí sinh, thống kê và duyệt thông tin tham dự.
                 </p>
             </div>
+            
+            {/* Footer nhỏ bên trái */}
+            <div className="relative z-10 mt-auto opacity-80 text-sm">
+                <p>Phiên bản 2.0 - Hỗ trợ phân quyền Viewer</p>
+            </div>
         </div>
 
         {/* Right Side: Login Form */}
@@ -67,7 +72,7 @@ export default function LoginPage() {
 
             <form action={handleSubmit} className="space-y-6">
                 
-                {/* Username Field */}
+                {/* Username */}
                 <div className="space-y-2">
                     <label className="text-sm font-bold text-slate-700 ml-1">Tài khoản</label>
                     <div className="relative group">
@@ -82,7 +87,7 @@ export default function LoginPage() {
                     </div>
                 </div>
 
-                {/* Password Field */}
+                {/* Password */}
                 <div className="space-y-2">
                     <label className="text-sm font-bold text-slate-700 ml-1">Mật khẩu</label>
                     <div className="relative group">
@@ -97,7 +102,7 @@ export default function LoginPage() {
                     </div>
                 </div>
                 
-                {/* Error Message */}
+                {/* Error Alert */}
                 {error && (
                     <div className="p-4 bg-red-50 border border-red-100 rounded-xl flex items-start gap-3 animate-in fade-in slide-in-from-top-2">
                         <AlertCircle size={20} className="text-red-500 shrink-0"/>

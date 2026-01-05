@@ -25,7 +25,7 @@ services:
       - ./certbot/www:/var/www/certbot
       # LƯU Ý: Đường dẫn này dựa trên log PM2 bạn gửi. Hãy kiểm tra kỹ.
       # Cấu trúc: [Đường dẫn thật trên VPS]:[Đường dẫn giả lập trong Nginx]
-      - /home/sotubuadm/web-techgen/umt-backend/uploads:/var/www/uploads
+      - ../umt-backend/uploads:/var/www/uploads
     extra_hosts:
       # Dòng này giúp Nginx trong Docker gọi được Backend (PM2) ở ngoài qua: http://host.docker.internal:4000
       - "host.docker.internal:host-gateway"

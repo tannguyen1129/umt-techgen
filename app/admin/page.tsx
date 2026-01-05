@@ -8,12 +8,22 @@ import {
   ChevronLeft, ChevronRight, User, Calendar, CreditCard, 
   Phone, Mail, School, Award, FileBadge, CheckCircle, AlertCircle, 
   Loader2, Clock, FileSpreadsheet, AlertTriangle,
-  Trash2, LayoutDashboard, StickyNote, Save, Pencil, Megaphone
+  Trash2, LayoutDashboard, StickyNote, Save, Pencil, Megaphone,
+  Search, SlidersHorizontal, ArrowRight
 } from "lucide-react";
 import Link from "next/link";
-import { logoutAdmin } from "../actions/auth";
+import { logoutAdmin, getCurrentRole } from "@/app/actions/auth";
 import { useRouter } from "next/navigation";
 import { EditModal } from "@/components/EditModal";
+
+// --- CẤU HÌNH ĐỊA CHỈ BACKEND ---
+const BACKEND_URL = ""; 
+
+const getImageUrl = (path: string | null | undefined) => {
+    if (!path) return null;
+    if (path.startsWith("http")) return path; 
+    return `${BACKEND_URL}${path}`;
+};
 
 // --- TYPES ---
 type Candidate = {
@@ -127,26 +137,27 @@ const ImageModal = ({ src, alt, onClose }: { src: string; alt: string; onClose: 
   );
 };
 
-// --- MODAL CHI TIẾT (CÓ SAVE NOTE) ---
+// --- MODAL CHI TIẾT ---
 const DetailModal = ({ 
     candidate, 
+    role, 
     onClose, 
     onVerify, 
     onDelete, 
-    onSaveNote, // <-- Nhận prop này
+    onSaveNote, 
     onViewImage 
 }: { 
     candidate: Candidate; 
+    role: string;
     onClose: () => void; 
     onVerify: (id: string, status: string, note?: string) => void; 
     onDelete: (id: string) => void; 
-    onSaveNote: (id: string, note: string) => void; // <-- Type cho prop
+    onSaveNote: (id: string, note: string) => void; 
     onViewImage: (src: string, alt: string) => void 
 }) => {
     const [note, setNote] = useState(candidate.note || "");
     const [isSaving, setIsSaving] = useState(false);
 
-    // Hàm xử lý lưu note riêng
     const handleSaveNoteClick = async () => {
         setIsSaving(true);
         await onSaveNote(candidate.id, note);
@@ -154,11 +165,12 @@ const DetailModal = ({
     };
 
     if (!candidate) return null;
+    const isViewer = role === 'VIEWER';
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in zoom-in-95 duration-200" onClick={onClose}>
             <div className="bg-white rounded-3xl shadow-2xl w-full max-w-5xl max-h-[90vh] flex flex-col overflow-hidden border border-slate-100" onClick={e => e.stopPropagation()}>
-                {/* Header */}
+                {/* Header Modal */}
                 <div className="flex justify-between items-center p-6 border-b border-slate-100 bg-slate-50/50 backdrop-blur-sm">
                     <div className="flex items-center gap-5">
                         <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-2xl flex items-center justify-center font-bold text-2xl shadow-lg shadow-blue-500/20">
@@ -178,7 +190,7 @@ const DetailModal = ({
                     </button>
                 </div>
 
-                {/* Body */}
+                {/* Body Modal */}
                 <div className="flex-1 overflow-y-auto p-8 bg-slate-50/30 custom-scrollbar">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                         {/* Cột Trái: Thông tin */}
@@ -244,30 +256,30 @@ const DetailModal = ({
 
                         {/* Cột Phải */}
                         <div className="lg:col-span-5 space-y-6">
-                            
-                             {/* --- PHẦN GHI CHÚ ADMIN (ĐÃ CÓ NÚT SAVE RIÊNG) --- */}
+                             {/* Ghi chú Admin */}
                              <div className="bg-yellow-50 p-5 rounded-2xl border border-yellow-200 shadow-sm">
                                 <div className="flex justify-between items-center mb-2">
                                     <h3 className="font-bold text-yellow-800 flex items-center gap-2">
                                         <StickyNote size={18}/> Ghi chú Admin
                                     </h3>
-                                    {/* Nút Lưu Ghi Chú Riêng */}
-                                    <button 
-                                        onClick={handleSaveNoteClick}
-                                        disabled={isSaving}
-                                        className="text-xs bg-yellow-400 hover:bg-yellow-500 text-white font-bold px-3 py-1.5 rounded-lg transition shadow-sm flex items-center gap-1 disabled:opacity-50"
-                                    >
-                                        {isSaving ? <Loader2 size={12} className="animate-spin"/> : <Save size={12}/>} Lưu
-                                    </button>
+                                    {!isViewer && (
+                                        <button 
+                                            onClick={handleSaveNoteClick}
+                                            disabled={isSaving}
+                                            className="text-xs bg-yellow-400 hover:bg-yellow-500 text-white font-bold px-3 py-1.5 rounded-lg transition shadow-sm flex items-center gap-1 disabled:opacity-50"
+                                        >
+                                            {isSaving ? <Loader2 size={12} className="animate-spin"/> : <Save size={12}/>} Lưu
+                                        </button>
+                                    )}
                                 </div>
                                 <textarea 
                                     className="w-full text-sm p-3 rounded-xl border border-yellow-200 bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400/50 min-h-[100px]"
-                                    placeholder="Ghi chú vấn đề hồ sơ (Lưu ý: Có thể lưu mà không cần Duyệt/Hủy)..."
+                                    placeholder={isViewer ? "Không có ghi chú" : "Ghi chú vấn đề hồ sơ..."}
                                     value={note}
                                     onChange={(e) => setNote(e.target.value)}
+                                    readOnly={isViewer}
                                 ></textarea>
                             </div>
-                            {/* --------------------------- */}
 
                             <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm h-fit">
                                 <h3 className="font-bold text-slate-800 mb-5 flex items-center gap-2 text-lg">
@@ -297,9 +309,9 @@ const DetailModal = ({
                                 </h3>
                                 <div className="grid grid-cols-2 gap-3">
                                     {[
-                                        { src: candidate.cccdPath, title: "CCCD Mặt trước" },
-                                        { src: candidate.cccdBackPath, title: "CCCD Mặt sau" },
-                                        { src: candidate.studentCardPath, title: "Thẻ Học sinh", full: true }
+                                        { src: getImageUrl(candidate.cccdPath), title: "CCCD Mặt trước" },
+                                        { src: getImageUrl(candidate.cccdBackPath), title: "CCCD Mặt sau" },
+                                        { src: getImageUrl(candidate.studentCardPath), title: "Thẻ Học sinh", full: true }
                                     ].map((img, idx) => (
                                         <div 
                                             key={idx} 
@@ -332,49 +344,61 @@ const DetailModal = ({
                 </div>
 
                 {/* Footer Actions */}
-                <div className="p-5 border-t border-slate-100 bg-white flex flex-col sm:flex-row justify-between items-center gap-4">
-                    <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-3 bg-slate-50 px-4 py-2 rounded-xl border border-slate-100">
-                            <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Trạng thái:</span>
-                            <span className={`px-2.5 py-0.5 rounded-md text-xs font-bold flex items-center gap-1.5 ${
-                                candidate.status === 'APPROVED' ? 'bg-green-100 text-green-700' : 
-                                candidate.status === 'REJECTED' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'
-                            }`}>
-                                {candidate.status === 'APPROVED' && <CheckCircle size={12}/>}
-                                {candidate.status === 'REJECTED' && <AlertCircle size={12}/>}
-                                {candidate.status === 'PENDING' && <Loader2 size={12} className="animate-spin"/>}
-                                {candidate.status === 'PENDING' ? 'Chờ duyệt' : candidate.status === 'APPROVED' ? 'Đã duyệt' : 'Đã từ chối'}
-                            </span>
+                {!isViewer && (
+                    <div className="p-5 border-t border-slate-100 bg-white flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-3 bg-slate-50 px-4 py-2 rounded-xl border border-slate-100">
+                                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Trạng thái:</span>
+                                <span className={`px-2.5 py-0.5 rounded-md text-xs font-bold flex items-center gap-1.5 ${
+                                    candidate.status === 'APPROVED' ? 'bg-green-100 text-green-700' : 
+                                    candidate.status === 'REJECTED' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'
+                                }`}>
+                                    {candidate.status === 'APPROVED' && <CheckCircle size={12}/>}
+                                    {candidate.status === 'REJECTED' && <AlertCircle size={12}/>}
+                                    {candidate.status === 'PENDING' && <Loader2 size={12} className="animate-spin"/>}
+                                    {candidate.status === 'PENDING' ? 'Chờ duyệt' : candidate.status === 'APPROVED' ? 'Đã duyệt' : 'Đã từ chối'}
+                                </span>
+                            </div>
+                            <button 
+                                onClick={() => onDelete(candidate.id)}
+                                className="px-4 py-2 bg-white border border-slate-200 text-slate-500 rounded-xl hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition font-bold text-xs flex items-center gap-2 group h-full"
+                                title="Xóa hồ sơ"
+                            >
+                                <Trash2 size={16} className="group-hover:text-red-600"/> 
+                                <span className="hidden sm:inline">Xóa</span>
+                            </button>
                         </div>
-                        <button 
-                            onClick={() => onDelete(candidate.id)}
-                            className="px-4 py-2 bg-white border border-slate-200 text-slate-500 rounded-xl hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition font-bold text-xs flex items-center gap-2 group h-full"
-                            title="Xóa hồ sơ"
-                        >
-                            <Trash2 size={16} className="group-hover:text-red-600"/> 
-                            <span className="hidden sm:inline">Xóa</span>
-                        </button>
-                    </div>
 
-                    <div className="flex gap-3 w-full sm:w-auto">
-                        <button onClick={() => onVerify(candidate.id, "REJECTED", note)} className="flex-1 sm:flex-none px-5 py-2.5 bg-white border border-red-200 text-red-600 rounded-xl hover:bg-red-50 transition font-bold text-sm flex items-center justify-center gap-2">
-                            <X size={18}/> Từ chối
-                        </button>
-                        <button onClick={() => onVerify(candidate.id, "APPROVED", note)} className="flex-1 sm:flex-none px-6 py-2.5 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl hover:shadow-lg hover:shadow-emerald-500/30 transition font-bold text-sm flex items-center justify-center gap-2">
-                            <Check size={18}/> Duyệt hồ sơ
-                        </button>
+                        <div className="flex gap-3 w-full sm:w-auto">
+                            <button onClick={() => onVerify(candidate.id, "REJECTED", note)} className="flex-1 sm:flex-none px-5 py-2.5 bg-white border border-red-200 text-red-600 rounded-xl hover:bg-red-50 transition font-bold text-sm flex items-center justify-center gap-2">
+                                <X size={18}/> Từ chối
+                            </button>
+                            <button onClick={() => onVerify(candidate.id, "APPROVED", note)} className="flex-1 sm:flex-none px-6 py-2.5 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl hover:shadow-lg hover:shadow-emerald-500/30 transition font-bold text-sm flex items-center justify-center gap-2">
+                                <Check size={18}/> Duyệt hồ sơ
+                            </button>
+                        </div>
                     </div>
-                </div>
+                )}
+                {isViewer && (
+                    <div className="p-4 border-t border-slate-100 bg-white text-center text-slate-500 text-sm">
+                        Chế độ xem (View Only) - Không thể chỉnh sửa
+                    </div>
+                )}
             </div>
         </div>
     );
 };
 
+// --- COMPONENT CHÍNH ---
 export default function AdminPage() {
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   
+  const [role, setRole] = useState<string>("VIEWER");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+
   const [filterTable, setFilterTable] = useState("ALL");
   const [filterStatus, setFilterStatus] = useState("ALL");
   const [page, setPage] = useState(1);
@@ -388,12 +412,19 @@ export default function AdminPage() {
 
   const router = useRouter();
 
-  useEffect(() => { loadData(); }, [page, filterTable, filterStatus]); 
+  useEffect(() => { 
+      loadData(); 
+      const fetchRole = async () => {
+          const r = await getCurrentRole();
+          setRole(r);
+      };
+      fetchRole();
+  }, [page, filterTable, filterStatus, fromDate, toDate]); 
 
   const loadData = async () => {
     setLoading(true);
     try {
-        const data = await getCandidates({ page: page, limit: 10, table: filterTable, status: filterStatus });
+        const data = await getCandidates({ page: page, limit: 10, table: filterTable, status: filterStatus, fromDate: fromDate, toDate: toDate });
         if (data && Array.isArray(data.candidates)) {
             const validData = data.candidates.filter((c: any) => c && c.id);
             setCandidates(validData as unknown as Candidate[]); 
@@ -432,15 +463,10 @@ export default function AdminPage() {
     });
   };
 
-  // --- LOGIC MỚI: LƯU NOTE MÀ KHÔNG ĐỔI STATUS ---
   const handleSaveNote = async (id: string, note: string) => {
-      // Tìm candidate hiện tại để lấy status cũ
       const currentCandidate = candidates.find(c => c.id === id);
-      const currentStatus = currentCandidate ? currentCandidate.status : "PENDING"; // Mặc định PENDING nếu không tìm thấy
-
-      // Gọi API updateStatus nhưng giữ nguyên status cũ, chỉ đổi note
+      const currentStatus = currentCandidate ? currentCandidate.status : "PENDING"; 
       const res = await updateStatus(id, currentStatus, note);
-      
       if (res.success) {
           setCandidates(prev => prev.map(c => c.id === id ? { ...c, note } : c));
           if (selectedCandidate?.id === id) {
@@ -463,9 +489,7 @@ export default function AdminPage() {
           if (res.success) {
               setCandidates(prev => prev.filter(c => c.id !== id));
               setTotalItems(prev => prev - 1);
-              if (selectedCandidate && selectedCandidate.id === id) {
-                  setSelectedCandidate(null);
-              }
+              if (selectedCandidate && selectedCandidate.id === id) setSelectedCandidate(null);
               setToast({ message: "Đã xóa hồ sơ thành công!", type: 'success' });
           } else {
               setToast({ message: res.message || "Xóa thất bại, vui lòng thử lại.", type: 'error' });
@@ -476,8 +500,16 @@ export default function AdminPage() {
 
   const exportExcel = async () => {
     const data = await getCandidates({ page: 1, limit: 10000, table: filterTable, status: filterStatus });
-    const fullList = (data.candidates || []) as unknown as Candidate[];
-
+    let fullList = (data.candidates || []) as unknown as Candidate[];
+    if (fromDate) {
+        const from = new Date(fromDate);
+        fullList = fullList.filter(c => new Date(c.createdAt) >= from);
+    }
+    if (toDate) {
+        const to = new Date(toDate);
+        to.setHours(23, 59, 59, 999);
+        fullList = fullList.filter(c => new Date(c.createdAt) <= to);
+    }
     const dataToExport = fullList.map((c) => ({
         "Họ tên": c.fullName,
         "Ngày sinh": formatDate(c.dob), 
@@ -492,19 +524,22 @@ export default function AdminPage() {
         "Bảng thi": c.table,
         "Trạng thái": c.status === 'APPROVED' ? 'Đã duyệt' : c.status === 'REJECTED' ? 'Từ chối' : 'Chờ duyệt',
         "Ghi chú": c.note || "",
-        "Link ảnh CCCD Trước": c.cccdPath ? window.location.origin + c.cccdPath : "",
-        "Link ảnh CCCD Sau": c.cccdBackPath ? window.location.origin + c.cccdBackPath : "",
-        "Link ảnh Thẻ HS": c.studentCardPath ? window.location.origin + c.studentCardPath : "",
+        "Link ảnh CCCD Trước": c.cccdPath ? BACKEND_URL + c.cccdPath : "",
+        "Link ảnh CCCD Sau": c.cccdBackPath ? BACKEND_URL + c.cccdBackPath : "",
+        "Link ảnh Thẻ HS": c.studentCardPath ? BACKEND_URL + c.studentCardPath : "",
         "Ngày đăng ký": formatDate(c.createdAt) 
     }));
-
     const worksheet = XLSX.utils.json_to_sheet(dataToExport);
     const workbook = XLSX.utils.book_new();
     const sheetName = filterTable === "ALL" ? "All_Candidates" : `Bang_${filterTable}`;
     XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
-    const fileName = `Danh_sach_thi_sinh_${filterTable}_${new Date().toLocaleDateString('vi-VN').replace(/\//g, '-')}.xlsx`;
+    let fileName = `DS_ThiSinh`;
+    if(filterTable !== 'ALL') fileName += `_${filterTable}`;
+    if(fromDate) fileName += `_tu_${fromDate}`;
+    if(toDate) fileName += `_den_${toDate}`;
+    fileName += `.xlsx`;
     XLSX.writeFile(workbook, fileName);
-    setToast({ message: "Đã xuất file Excel thành công!", type: 'success' });
+    setToast({ message: `Đã xuất ${fullList.length} hồ sơ ra Excel!`, type: 'success' });
   };
 
   const handleUpdateInfo = async (id: string, newData: any) => {
@@ -517,131 +552,104 @@ export default function AdminPage() {
     } else {
         setToast({ message: "Lỗi cập nhật", type: 'error' });
     }
-};
+  };
 
   const handleLogout = async () => {
       await logoutAdmin();
       router.push("/admin/login");
   };
 
+  const isViewer = role === 'VIEWER';
+
   return (
     <div className="min-h-screen bg-slate-100 p-6 md:p-8 font-sans relative">
       
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+      {previewImage && <ImageModal src={previewImage.src} alt={previewImage.alt} onClose={() => setPreviewImage(null)} />}
+      {confirmModal && <ConfirmModal isOpen={confirmModal.isOpen} title={confirmModal.title} message={confirmModal.message} onConfirm={confirmModal.onConfirm} onCancel={() => setConfirmModal(null)} />}
+      {!isViewer && editCandidate && <EditModal candidate={editCandidate} onClose={() => setEditCandidate(null)} onSave={handleUpdateInfo} />}
+      {selectedCandidate && <DetailModal candidate={selectedCandidate} role={role} onClose={() => setSelectedCandidate(null)} onVerify={handleVerify} onDelete={handleDelete} onSaveNote={handleSaveNote} onViewImage={(src, alt) => setPreviewImage({ src, alt })} />}
 
-      {previewImage && (
-        <ImageModal src={previewImage.src} alt={previewImage.alt} onClose={() => setPreviewImage(null)} />
-      )}
-
-      {confirmModal && (
-        <ConfirmModal 
-          isOpen={confirmModal.isOpen} 
-          title={confirmModal.title} 
-          message={confirmModal.message} 
-          onConfirm={confirmModal.onConfirm} 
-          onCancel={() => setConfirmModal(null)} 
-        />
-      )}
-
-      {editCandidate && (
-        <EditModal 
-            candidate={editCandidate} 
-            onClose={() => setEditCandidate(null)} 
-            onSave={handleUpdateInfo} 
-        />
-      )}
-
-      {selectedCandidate && (
-        <DetailModal 
-            candidate={selectedCandidate}
-            onClose={() => setSelectedCandidate(null)}
-            onVerify={handleVerify}
-            onDelete={handleDelete}
-            onSaveNote={handleSaveNote} // <-- Truyền hàm lưu note mới vào modal
-            onViewImage={(src, alt) => setPreviewImage({ src, alt })}
-        />
-      )}
-
-      <div className="bg-white rounded-[1.5rem] shadow-sm border border-slate-200/60 p-6 md:p-8 max-w-[1600px] mx-auto min-h-[85vh] flex flex-col">
+      <div className="max-w-[1600px] mx-auto min-h-[85vh] flex flex-col gap-6">
         
-        {/* Header Dashboard */}
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 pb-6 border-b border-slate-100 gap-6">
-          <div>
-            <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
-                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
-                    <Award size={18} />
-                </div>
-                Quản trị viên <span className="text-slate-300 font-light">|</span> UMT TechGen
-            </h1>
-            <p className="text-slate-500 text-sm mt-2 font-medium flex items-center gap-2">
-                <CheckCircle size={14} className="text-emerald-500"/>
-                Hệ thống đang hoạt động • Tổng số hồ sơ: <span className="font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">{totalItems}</span>
-            </p>
-          </div>
-
-          <div className="flex flex-wrap gap-3 items-center w-full lg:w-auto">
-
-            <Link href="/admin/dashboard" className="bg-white border border-slate-200 text-slate-600 px-4 py-2.5 rounded-xl flex items-center gap-2 hover:bg-slate-50 hover:text-blue-600 hover:border-blue-200 transition font-bold text-sm shadow-sm group">
-                <LayoutDashboard size={18} className="text-slate-400 group-hover:text-blue-600 transition"/> 
-                Dashboard
-            </Link>
-
-            <Link href="/admin/announcements" className="bg-white border border-slate-200 text-slate-600 px-4 py-2.5 rounded-xl flex items-center gap-2 hover:bg-slate-50 hover:text-orange-600 hover:border-orange-200 transition font-bold text-sm shadow-sm group">
-        <Megaphone size={18} className="text-slate-400 group-hover:text-orange-600 transition"/> 
-        Thông báo
-    </Link>
-
-            <div className="h-8 w-px bg-slate-200 mx-2 hidden lg:block"></div>
-
-             <Link href="/admin/contacts" className="bg-white border border-slate-200 text-slate-600 px-4 py-2.5 rounded-xl flex items-center gap-2 hover:bg-slate-50 hover:text-slate-900 hover:border-slate-300 transition font-bold text-sm shadow-sm">
-                <MessageSquare size={18} /> Hộp thư đến
-             </Link>
-
-             <div className="h-8 w-px bg-slate-200 mx-2 hidden lg:block"></div>
-
-             {/* FILTER STATUS (MỚI) */}
-             <div className="relative group">
-                <Filter className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-hover:text-blue-500 transition" size={18} />
-                <select 
-                    value={filterStatus}
-                    onChange={(e) => { setFilterStatus(e.target.value); setPage(1); }}
-                    className="pl-10 pr-8 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer font-bold text-sm appearance-none hover:bg-white transition min-w-[160px]"
-                >
-                    <option value="ALL">Tất cả trạng thái</option>
-                    <option value="PENDING">Chờ duyệt</option>
-                    <option value="APPROVED">Đã duyệt</option>
-                    <option value="REJECTED">Từ chối</option>
-                </select>
-                <div className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
-                    <ChevronLeft size={16} className="-rotate-90"/>
-                </div>
+        {/* --- HEADER RIÊNG BIỆT --- */}
+        <div className="flex justify-between items-center bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
+             <div>
+                <h1 className="text-xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+                    <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
+                        <Award size={18} />
+                    </div>
+                    Quản trị viên <span className="text-slate-300 font-light">|</span> UMT TechGen
+                </h1>
+                <p className="text-slate-500 text-xs mt-1 font-medium ml-10">
+                    Phiên: <span className="font-bold text-blue-600 uppercase">{role}</span> • Tổng hồ sơ: <span className="font-bold text-slate-900">{totalItems}</span>
+                </p>
              </div>
-
-             {/* FILTER TABLE */}
-             <div className="relative group">
-                <div className="absolute left-3.5 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-slate-400"></div>
-                <select 
-                    value={filterTable}
-                    onChange={(e) => { setFilterTable(e.target.value); setPage(1); }}
-                    className="pl-8 pr-8 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer font-bold text-sm appearance-none hover:bg-white transition min-w-[150px]"
-                >
-                    <option value="ALL">Tất cả bảng thi</option>
-                    <option value="A">Chỉ hiện Bảng A</option>
-                    <option value="B">Chỉ hiện Bảng B</option>
-                </select>
-                <div className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
-                    <ChevronLeft size={16} className="-rotate-90"/>
-                </div>
-             </div>
-
-             <button onClick={exportExcel} className="bg-emerald-600 text-white px-5 py-2.5 rounded-xl flex items-center gap-2 hover:bg-emerald-700 transition shadow-lg shadow-emerald-600/20 font-bold text-sm active:scale-95">
-                <FileSpreadsheet size={18} /> Xuất Excel
-             </button>
              
-             <button onClick={handleLogout} className="bg-red-50 text-red-600 border border-red-100 px-4 py-2.5 rounded-xl flex items-center gap-2 hover:bg-red-100 hover:border-red-200 transition font-bold text-sm">
-                <LogOut size={18} />
+             <button onClick={handleLogout} className="bg-red-50 text-red-600 border border-red-100 px-4 py-2 rounded-xl flex items-center gap-2 hover:bg-red-600 hover:text-white hover:border-red-600 transition font-bold text-sm group">
+                <LogOut size={16} /> <span className="hidden sm:inline">Đăng xuất</span>
              </button>
-          </div>
+        </div>
+        
+        {/* --- TOOLBAR CÂN ĐỐI --- */}
+        <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-col xl:flex-row gap-4 justify-between items-start xl:items-center">
+             
+             {/* Nhóm 1: Điều hướng */}
+             <div className="flex flex-wrap gap-2 w-full xl:w-auto">
+                <Link href="/admin/dashboard" className="bg-blue-50 text-blue-700 border border-blue-200 px-4 py-2.5 rounded-xl flex items-center gap-2 font-bold text-sm shadow-sm">
+                    <LayoutDashboard size={18}/> Dashboard
+                </Link>
+                <Link href="/admin/announcements" className="bg-white text-slate-600 border border-slate-200 px-4 py-2.5 rounded-xl flex items-center gap-2 hover:bg-slate-50 hover:text-orange-600 transition font-bold text-sm">
+                    <Megaphone size={18}/> Thông báo
+                </Link>
+                <Link href="/admin/contacts" className="bg-white text-slate-600 border border-slate-200 px-4 py-2.5 rounded-xl flex items-center gap-2 hover:bg-slate-50 hover:text-slate-900 transition font-bold text-sm">
+                    <MessageSquare size={18} /> Hộp thư
+                </Link>
+             </div>
+
+             <div className="w-full h-px bg-slate-100 xl:hidden"></div>
+
+             {/* Nhóm 2 & 3: Bộ lọc & Hành động */}
+             <div className="flex flex-col md:flex-row gap-4 w-full xl:w-auto items-center">
+                 
+                 {/* Khối lọc ngày tháng */}
+                 <div className="flex items-center gap-2 bg-slate-50 p-1.5 rounded-xl border border-slate-200 w-full md:w-auto">
+                     <div className="relative flex-1">
+                        <input type="date" value={fromDate} onChange={(e) => setFromDate(e.target.value)} className="w-full pl-2 pr-1 py-1.5 bg-white rounded-lg border border-slate-200 text-xs font-bold text-slate-600 focus:outline-none focus:border-blue-500" title="Từ ngày"/>
+                     </div>
+                     <ArrowRight size={14} className="text-slate-400"/>
+                     <div className="relative flex-1">
+                        <input type="date" value={toDate} onChange={(e) => setToDate(e.target.value)} className="w-full pl-2 pr-1 py-1.5 bg-white rounded-lg border border-slate-200 text-xs font-bold text-slate-600 focus:outline-none focus:border-blue-500" title="Đến ngày"/>
+                     </div>
+                 </div>
+
+                 {/* Khối Select Filters */}
+                 <div className="flex gap-2 w-full md:w-auto">
+                     <div className="relative flex-1 md:w-[150px]">
+                        <select value={filterStatus} onChange={(e) => { setFilterStatus(e.target.value); setPage(1); }} className="w-full pl-9 pr-8 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer font-bold text-sm appearance-none hover:bg-slate-50 transition">
+                            <option value="ALL">Mọi trạng thái</option>
+                            <option value="PENDING">Chờ duyệt</option>
+                            <option value="APPROVED">Đã duyệt</option>
+                            <option value="REJECTED">Từ chối</option>
+                        </select>
+                        <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+                     </div>
+
+                     <div className="relative flex-1 md:w-[140px]">
+                        <select value={filterTable} onChange={(e) => { setFilterTable(e.target.value); setPage(1); }} className="w-full pl-9 pr-8 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer font-bold text-sm appearance-none hover:bg-slate-50 transition">
+                            <option value="ALL">Tất cả bảng</option>
+                            <option value="A">Bảng A</option>
+                            <option value="B">Bảng B</option>
+                        </select>
+                        <SlidersHorizontal className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+                     </div>
+                 </div>
+
+                 {/* Nút Xuất Excel */}
+                 <button onClick={exportExcel} className="w-full md:w-auto bg-emerald-600 text-white px-5 py-2.5 rounded-xl flex items-center justify-center gap-2 hover:bg-emerald-700 transition shadow-lg shadow-emerald-600/20 font-bold text-sm active:scale-95 whitespace-nowrap">
+                    <FileSpreadsheet size={18} /> <span className="hidden lg:inline">Xuất Excel</span>
+                 </button>
+             </div>
         </div>
 
         {/* Bảng Danh sách */}
@@ -662,7 +670,7 @@ export default function AdminPage() {
               {loading ? (
                   <tr><td colSpan={7} className="px-6 py-24 text-center text-slate-400 font-medium"><div className="flex flex-col items-center gap-3"><Loader2 className="animate-spin text-blue-500" size={32}/>Đang tải dữ liệu...</div></td></tr>
               ) : candidates.length === 0 ? (
-                  <tr><td colSpan={7} className="px-6 py-24 text-center text-slate-400 italic bg-slate-50/30">Chưa có dữ liệu nào.</td></tr>
+                  <tr><td colSpan={7} className="px-6 py-24 text-center text-slate-400 italic bg-slate-50/30">Chưa có dữ liệu nào phù hợp.</td></tr>
               ) : (
                   candidates.map((c) => (
                     <tr key={c.id} className="bg-white hover:bg-slate-50/80 transition-colors duration-200 group">
@@ -714,7 +722,6 @@ export default function AdminPage() {
                         </span>
                       </td>
 
-                      {/* CỘT GHI CHÚ (MỚI) */}
                       <td className="px-6 py-4">
                         {c.note ? (
                             <span className="text-xs text-slate-500 italic truncate max-w-[150px] block border-b border-dashed border-slate-300 pb-0.5" title={c.note}>
@@ -727,49 +734,25 @@ export default function AdminPage() {
 
                       <td className="px-6 py-4">
                         <div className="flex justify-center gap-2 opacity-60 group-hover:opacity-100 transition-opacity duration-200">
-                            {/* Xem Chi Tiết */}
-                            <button 
-                                onClick={() => setSelectedCandidate(c)} 
-                                className="p-2 bg-white border border-slate-200 text-slate-500 rounded-xl hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition shadow-sm active:scale-95" 
-                                title="Xem chi tiết"
-                            >
+                            <button onClick={() => setSelectedCandidate(c)} className="p-2 bg-white border border-slate-200 text-slate-500 rounded-xl hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition shadow-sm active:scale-95" title="Xem chi tiết">
                                 <Eye size={16} />
                             </button>
 
-                            {/* 2. NÚT SỬA (THÊM MỚI VÀO ĐÂY) 👇 */}
-      <button 
-          onClick={(e) => { 
-              e.stopPropagation(); 
-              setEditCandidate(c); // <-- Kích hoạt Modal Edit tại đây
-          }} 
-          className="p-2 bg-white border border-slate-200 text-slate-500 rounded-xl hover:bg-amber-50 hover:text-amber-600 hover:border-amber-200 transition shadow-sm active:scale-95" 
-          title="Cập nhật thông tin"
-      >
-          <Pencil size={16} />
-      </button>
-                            
-                            {/* Duyệt Nhanh */}
-                            {c.status !== 'APPROVED' && (
-                                <button 
-                                    onClick={() => handleVerify(c.id, "APPROVED")} 
-                                    className="p-2 bg-emerald-50 text-emerald-600 rounded-xl hover:bg-emerald-600 hover:text-white transition border border-emerald-200 active:scale-95 shadow-sm" 
-                                    title="Duyệt nhanh"
-                                >
-                                    <Check size={16} strokeWidth={3} />
-                                </button>
+                            {!isViewer && (
+                                <>
+                                    <button onClick={(e) => { e.stopPropagation(); setEditCandidate(c); }} className="p-2 bg-white border border-slate-200 text-slate-500 rounded-xl hover:bg-amber-50 hover:text-amber-600 hover:border-amber-200 transition shadow-sm active:scale-95" title="Cập nhật thông tin">
+                                        <Pencil size={16} />
+                                    </button>
+                                    {c.status !== 'APPROVED' && (
+                                        <button onClick={() => handleVerify(c.id, "APPROVED")} className="p-2 bg-emerald-50 text-emerald-600 rounded-xl hover:bg-emerald-600 hover:text-white transition border border-emerald-200 active:scale-95 shadow-sm" title="Duyệt nhanh">
+                                            <Check size={16} strokeWidth={3} />
+                                        </button>
+                                    )}
+                                    <button onClick={(e) => { e.stopPropagation(); handleDelete(c.id); }} className="p-2 bg-white border border-slate-200 text-slate-400 rounded-xl hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition shadow-sm active:scale-95" title="Xóa hồ sơ">
+                                        <Trash2 size={16} />
+                                    </button>
+                                </>
                             )}
-
-                             {/* NÚT XÓA Ở BẢNG */}
-                             <button 
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleDelete(c.id);
-                                }} 
-                                className="p-2 bg-white border border-slate-200 text-slate-400 rounded-xl hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition shadow-sm active:scale-95" 
-                                title="Xóa hồ sơ"
-                            >
-                                <Trash2 size={16} />
-                            </button>
                         </div>
                       </td>
                     </tr>
@@ -783,18 +766,10 @@ export default function AdminPage() {
         <div className="flex justify-between items-center mt-6 pt-4 border-t border-slate-100">
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Trang {page} / {totalPages > 0 ? totalPages : 1}</span>
             <div className="flex gap-2">
-                <button 
-                    disabled={page === 1}
-                    onClick={() => setPage(p => Math.max(1, p - 1))}
-                    className="px-3 py-1.5 border border-slate-200 rounded-lg hover:bg-white hover:border-slate-300 disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:border-slate-200 flex items-center gap-1 text-sm font-bold text-slate-600 transition bg-slate-50"
-                >
+                <button disabled={page === 1} onClick={() => setPage(p => Math.max(1, p - 1))} className="px-3 py-1.5 border border-slate-200 rounded-lg hover:bg-white hover:border-slate-300 disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:border-slate-200 flex items-center gap-1 text-sm font-bold text-slate-600 transition bg-slate-50">
                     <ChevronLeft size={16} /> Trước
                 </button>
-                <button 
-                    disabled={page >= totalPages}
-                    onClick={() => setPage(p => p + 1)}
-                    className="px-3 py-1.5 border border-slate-200 rounded-lg hover:bg-white hover:border-slate-300 disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:border-slate-200 flex items-center gap-1 text-sm font-bold text-slate-600 transition bg-slate-50"
-                >
+                <button disabled={page >= totalPages} onClick={() => setPage(p => p + 1)} className="px-3 py-1.5 border border-slate-200 rounded-lg hover:bg-white hover:border-slate-300 disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:border-slate-200 flex items-center gap-1 text-sm font-bold text-slate-600 transition bg-slate-50">
                     Sau <ChevronRight size={16} />
                 </button>
             </div>

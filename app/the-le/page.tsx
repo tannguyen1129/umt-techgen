@@ -138,9 +138,22 @@ export default function RulesPage() {
                     <span className="text-xs font-semibold text-blue-500 bg-blue-50 px-2 py-1 rounded w-fit border border-blue-100">Trực tuyến</span>
                 </div>
                 <div className="md:w-2/3 text-slate-700 text-sm space-y-2 pl-0 md:pl-2">
-                    <div className="flex gap-3"><span className="text-blue-400 font-bold">•</span> <span><strong>Vòng 1:</strong> Từ ngày 30 tháng 11 đến ngày 06 tháng 12 năm 2025</span></div>
-                    <div className="flex gap-3"><span className="text-blue-400 font-bold">•</span> <span><strong>Vòng 2:</strong> Từ ngày 15 tháng 12 đến ngày 21 tháng 12 năm 2025</span></div>
-                    <div className="flex gap-3"><span className="text-blue-400 font-bold">•</span> <span><strong>Vòng 3:</strong> Từ ngày 25 tháng 12 đến ngày 30 tháng 12 năm 2025</span></div>
+                    <div className="flex gap-3">
+                        <span className="text-blue-400 font-bold">•</span> 
+                        <span><strong>Vòng 1:</strong> Từ ngày 30 tháng 11 đến ngày 06 tháng 12 năm 2025</span>
+                    </div>
+                    
+                    {/* Cập nhật ngày kết thúc 24/12 */}
+                    <div className="flex gap-3">
+                        <span className="text-blue-400 font-bold">•</span> 
+                        <span><strong>Vòng 2:</strong> Từ ngày 22 tháng 12 đến ngày 28 tháng 12 năm 2025</span>
+                    </div>
+
+                    {/* Cập nhật hiệu ứng gạch bỏ */}
+                    <div className="flex gap-3 text-slate-400 opacity-70">
+                        <span className="text-slate-300 font-bold">•</span> 
+                        <span className="line-through decoration-slate-400"><strong>Vòng 3:</strong> Từ ngày 25 tháng 12 đến ngày 30 tháng 12 năm 2025</span>
+                    </div>
                 </div>
             </div>
 

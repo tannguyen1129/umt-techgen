@@ -13,17 +13,21 @@ export default function PartnersPage() {
   // 2. Dữ liệu Đối tác Đồng hành
   const companionPartners = [
     { id: 4, name: "Vinasa", src: "/images/13_vinasa.png", website: "https://vinasa.org.vn/" },
-    { id: 5, name: "THD", src: "/images/5_thd.png", website: "https://thdcybersecurity.com/" },
-    { id: 6, name: "InnoEx", src: "/images/6_innoex.png", website: "https://innoex.vn/vi/" },
-    { id: 7, name: "IVS", src: "/images/7_ivs.png", website: "https://indivisys.vn/" },
-    { id: 8, name: "Braney", src: "/images/8_braney.png", website: "https://braney.vn/" },
-    { id: 9, name: "PVcomBank", src: "/images/9_pvcombank.png", website: "https://www.pvcombank.com.vn/" },
-    { id: 10, name: "QuickCom", src: "/images/10_quickcom1.png", website: "https://quickom.net/" },
-    { id: 11, name: "SoftWorld", src: "/images/11_softworld_co.png", website: "https://softworldvietnam.com/" },
-    { id: 12, name: "VietDynamic", src: "/images/12_vietdynamic.png", website: "https://vietdynamic.com.vn/" },
-    { id: 13, name: "AIHAY", src: "/images/4_AIHAY.png", website: "https://ai-hay.vn/" },
-    { id: 14, name: "VNetwork", src: "/images/14_Vnetwork.png", website: "https://www.vnetwork.vn/" },
-    { id: 15, name: "WESET", src: "/images/15_weset.png", website: "https://weset.edu.vn/" },
+    { id: 5, name: "VNPT", src: "/images/vnpt-1.png", website: "https://vinhlong.vnpt.vn/" },
+    { id: 6, name: "Vinaphone", src: "/images/vinaphone.png", website: "https://vinhlong.vnpt.vn/" },
+    { id: 7, name: "BytePlus", src: "/images/BytePlus_Company_Logo.png", website: "https://www.byteplus.com/en" },
+    { id: 8, name: "Đoàn Thanh Niên", src: "/images/logo-doan-thanh-nien.png", website: "https://www.facebook.com/profile.php?id=61582599270594" },
+    { id: 9, name: "THD", src: "/images/5_thd.png", website: "https://thdcybersecurity.com/" },
+    { id: 10, name: "InnoEx", src: "/images/6_innoex.png", website: "https://innoex.vn/vi/" },
+    { id: 11, name: "IVS", src: "/images/7_ivs.png", website: "https://indivisys.vn/" },
+    { id: 12, name: "Braney", src: "/images/8_braney.png", website: "https://braney.vn/" },
+    { id: 13, name: "PVcomBank", src: "/images/9_pvcombank.png", website: "https://www.pvcombank.com.vn/" },
+    { id: 14, name: "QuickCom", src: "/images/10_quickcom1.png", website: "https://quickom.net/" },
+    { id: 15, name: "SoftWorld", src: "/images/11_softworld_co.png", website: "https://softworldvietnam.com/" },
+    { id: 16, name: "VietDynamic", src: "/images/12_vietdynamic.png", website: "https://vietdynamic.com.vn/" },
+    { id: 17, name: "AIHAY", src: "/images/4_AIHAY.png", website: "https://ai-hay.vn/" },
+    { id: 18, name: "VNetwork", src: "/images/14_Vnetwork.png", website: "https://www.vnetwork.vn/" },
+    { id: 19, name: "WESET", src: "/images/15_weset.png", website: "https://weset.edu.vn/" },
   ];
 
   return (
