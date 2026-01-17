@@ -1,7 +1,6 @@
 import { Calendar, MapPin, Video, Monitor, Star, Award } from "lucide-react";
 import React from "react";
 
-// 1. CẬP NHẬT INTERFACE: date chấp nhận cả string và ReactNode
 interface TimelineItem {
   date: string | React.ReactNode; 
   title: string;
@@ -34,7 +33,7 @@ export default function TimelinePage() {
           highlight: false,
         },
         {
-          // 2. SỬA DỮ LIỆU VÒNG 2: Hiển thị 2 dòng ngày
+          // 1. ĐỔI TÊN THÀNH VÒNG SƠ LOẠI 1A
           date: (
             <div className="flex flex-col items-center md:items-end gap-0.5">
                 <span className="text-[10px] md:text-xs line-through opacity-60 font-normal text-slate-500">
@@ -45,7 +44,7 @@ export default function TimelinePage() {
                 </span>
             </div>
           ),
-          title: "Vòng Sơ loại 2",
+          title: "Vòng Sơ loại 1A", // Đã đổi tên
           type: "Online",
           location: "Hệ thống thi trắc nghiệm/Hệ thống UMTOJ",
           desc: "Cơ hội thứ 2 để các thí sinh tích lũy điểm số.",
@@ -59,6 +58,15 @@ export default function TimelinePage() {
           desc: "Đợt sơ loại cuối cùng chốt danh sách vào vòng trong.",
           highlight: false,
           isCancelled: true,
+        },
+        // 2. THÊM MỚI VÒNG SƠ LOẠI 2 (SAU VÒNG 3)
+        {
+          date: "14:00 - 16:00, 24/01/2026", // Đã chỉnh sang năm 2026 cho đúng logic
+          title: "Vòng Sơ loại 2",
+          type: "Online",
+          location: "Hệ thống UMTOJ",
+          desc: "Vòng loại cuối trước khi bước vào vòng thi chính thức.",
+          highlight: true, // Có thể bật highlight vì đây là vòng mới thêm
         },
       ],
     },
@@ -122,7 +130,8 @@ export default function TimelinePage() {
           icon: <Star className="text-yellow-500 fill-yellow-500" size={24} />,
         },
         {
-          date: "20/04/2026",
+          // 3. CẬP NHẬT NGÀY LỄ TỔNG KẾT
+          date: "Đầu tháng 05/2026",
           title: "Lễ Tổng kết & Trao giải",
           type: "Event",
           location: "Hội trường Lầu 9, Tòa nhà Sáng tạo, Trường UMT",
@@ -136,7 +145,7 @@ export default function TimelinePage() {
 
   return (
     <div className="bg-slate-50 min-h-screen pb-20">
-      {/* Header - Responsive Padding */}
+      {/* Header */}
       <div className="bg-blue-900 text-white pt-12 pb-16 md:pt-16 md:pb-24 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-48 h-48 md:w-64 md:h-64 bg-white/5 rounded-full blur-3xl -translate-y-10 translate-x-10"></div>
         <div className="container mx-auto px-4 text-center relative z-10">
@@ -147,11 +156,11 @@ export default function TimelinePage() {
         </div>
       </div>
 
-      {/* Timeline Content - Responsive Margin */}
+      {/* Timeline Content */}
       <div className="container mx-auto px-4 -mt-8 md:-mt-12 relative z-20 max-w-5xl">
         {events.map((phase) => (
           <div key={phase.id} className="mb-12 md:mb-16">
-            {/* Phase Header - Responsive Text */}
+            {/* Phase Header */}
             <div className="bg-white p-3 md:p-4 rounded-xl shadow-sm border border-slate-200 mb-6 md:mb-8 flex flex-col sm:flex-row items-start sm:items-center gap-2 md:gap-3 sticky top-20 md:top-24 z-30">
               <span className="bg-blue-100 text-blue-800 text-[10px] md:text-xs font-bold px-2 py-1 md:px-3 md:py-1 rounded-full uppercase shrink-0">
                 Giai đoạn {phase.id}
@@ -159,7 +168,7 @@ export default function TimelinePage() {
               <h2 className="text-base md:text-lg font-bold text-slate-900 leading-tight">{phase.phase}</h2>
             </div>
 
-            {/* Phase Items Container - Responsive Padding */}
+            {/* Phase Items Container */}
             <div className="relative pl-0 md:pl-8">
               
               {/* Cột mốc thời gian */}
@@ -176,7 +185,6 @@ export default function TimelinePage() {
                             }
                         `}>
                             <Calendar size={16} className="shrink-0" />
-                            {/* 3. CẬP NHẬT RENDER: Đổi span thành div để chứa nội dung phức tạp */}
                             <div className="text-sm">{item.date}</div>
                         </div>
                       </div>

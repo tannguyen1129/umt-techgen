@@ -2,18 +2,17 @@ import Image from "next/image";
 import { Cpu, Users, Star } from "lucide-react";
 
 export default function PartnersPage() {
-  // 1. Dữ liệu Đối tác Chiến lược
-  // BẠN HÃY ĐIỀN LINK WEBSITE VÀO PHẦN website: "..." NHÉ
+  // DATA ĐỐI TÁC
   const strategicPartners = [
-    { id: 1, name: "ZaloPay", src: "/images/Zalopay_logo_umt.png", website: "https://zalopay.vn/" },
-    { id: 2, name: "Hội Tin học TP.HCM", src: "/images/hca_hcm.png", website: "https://www.hca.org.vn/" },
-    { id: 3, name: "SITC", src: "/images/sitc.png", website: "https://www.sitc.edu.vn/" },
+    { id: 1, name: "Hội Tin học TP.HCM", src: "/images/hca_hcm.png", website: "https://www.hca.org.vn/" },
+    { id: 2, name: "VNetwork", src: "/images/14_Vnetwork.png", website: "https://www.vnetwork.vn/" },
+    { id: 3, name: "ZaloPay", src: "/images/Zalopay_logo_umt.png", website: "https://zalopay.vn/" },
+    { id: 4, name: "SITC", src: "/images/sitc.png", website: "https://www.sitc.edu.vn/" },
   ];
 
-  // 2. Dữ liệu Đối tác Đồng hành
   const companionPartners = [
-    { id: 4, name: "Vinasa", src: "/images/13_vinasa.png", website: "https://vinasa.org.vn/" },
-    { id: 5, name: "VNPT", src: "/images/vnpt-1.png", website: "https://vinhlong.vnpt.vn/" },
+    { id: 5, name: "Vinasa", src: "/images/13_vinasa.png", website: "https://vinasa.org.vn/" },
+    { id: 6, name: "VNPT", src: "/images/vnpt-1.png", website: "https://vinhlong.vnpt.vn/" },
     { id: 6, name: "Vinaphone", src: "/images/vinaphone.png", website: "https://vinhlong.vnpt.vn/" },
     { id: 7, name: "BytePlus", src: "/images/BytePlus_Company_Logo.png", website: "https://www.byteplus.com/en" },
     { id: 8, name: "Đoàn Thanh Niên", src: "/images/logo-doan-thanh-nien.png", website: "https://www.facebook.com/profile.php?id=61582599270594" },
@@ -26,9 +25,9 @@ export default function PartnersPage() {
     { id: 15, name: "SoftWorld", src: "/images/11_softworld_co.png", website: "https://softworldvietnam.com/" },
     { id: 16, name: "VietDynamic", src: "/images/12_vietdynamic.png", website: "https://vietdynamic.com.vn/" },
     { id: 17, name: "AIHAY", src: "/images/4_AIHAY.png", website: "https://ai-hay.vn/" },
-    { id: 18, name: "VNetwork", src: "/images/14_Vnetwork.png", website: "https://www.vnetwork.vn/" },
-    { id: 19, name: "WESET", src: "/images/15_weset.png", website: "https://weset.edu.vn/" },
+    { id: 18, name: "WESET", src: "/images/15_weset.png", website: "https://weset.edu.vn/" },
   ];
+
 
   return (
     <div className="bg-white min-h-screen font-sans text-slate-600">
@@ -43,7 +42,7 @@ export default function PartnersPage() {
 
         <div className="container mx-auto px-4 relative z-10">
             <div className="inline-block mb-4 px-4 py-1 rounded-full bg-white/10 text-blue-100 text-[10px] md:text-xs font-bold uppercase tracking-widest border border-white/10 backdrop-blur-sm">
-                UMT TechGen 2025
+                UMT TechGen 2026
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-white mb-4 md:mb-6 tracking-tight leading-tight">
                 Đơn vị Tổ chức & <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-cyan-200 block md:inline mt-2 md:mt-0">Đồng hành</span>

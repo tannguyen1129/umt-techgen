@@ -173,3 +173,18 @@ export async function updateCandidateInfo(id: string, data: any) {
     return { success: false, message: "Lỗi kết nối" };
   }
 }
+
+export async function sendEmailNotification(id: string, message: string) {
+    const API_URL = process.env.SERVER_API_URL || "http://10.11.10.21:4000/api";
+    try {
+        const res = await fetch(`${API_URL}/candidates/${id}/send-email`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message })
+        });
+        if (!res.ok) return { success: false, message: "Lỗi gửi mail" };
+        return await res.json();
+    } catch (error) {
+        return { success: false, message: "Lỗi kết nối" };
+    }
+}

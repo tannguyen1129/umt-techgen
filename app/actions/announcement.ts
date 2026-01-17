@@ -20,13 +20,15 @@ export async function getAnnouncements() {
   }
 }
 
-// 2. Tạo thông báo mới
-export async function createAnnouncement(data: any) {
+// 2. Tạo thông báo mới (Đã sửa để nhận FormData)
+export async function createAnnouncement(formData: FormData) {
   try {
     const res = await fetch(`${API_BASE}/announcements`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+      // KHÔNG set Content-Type: application/json ở đây vì ta gửi FormData
+      body: formData,
+      // @ts-ignore
+      duplex: 'half', // Bắt buộc cho Next.js khi upload file
     });
     
     if (!res.ok) {
@@ -37,23 +39,28 @@ export async function createAnnouncement(data: any) {
     revalidatePath('/admin/announcements'); // Làm mới dữ liệu
     return { success: true };
   } catch (error) {
+    console.error(error);
     return { success: false, message: "Lỗi kết nối Server" };
   }
 }
 
-// 3. Cập nhật thông báo
-export async function updateAnnouncement(id: number, data: any) {
+// 3. Cập nhật thông báo (Đã sửa để nhận FormData)
+export async function updateAnnouncement(id: number, formData: FormData) {
   try {
     const res = await fetch(`${API_BASE}/announcements/${id}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+      // KHÔNG set Content-Type: application/json
+      body: formData,
+      // @ts-ignore
+      duplex: 'half',
     });
+
     if (!res.ok) return { success: false, message: "Lỗi cập nhật" };
     
     revalidatePath('/admin/announcements');
     return { success: true };
   } catch (error) {
+    console.error(error);
     return { success: false, message: "Lỗi kết nối server" };
   }
 }

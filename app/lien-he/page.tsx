@@ -7,7 +7,7 @@ import { submitContact } from "@/app/actions/contact";
 
 const FAQS = [
     {
-        question: "Đối tượng nào được tham gia TechGen 2025?",
+        question: "Đối tượng nào được tham gia TechGen 2026?",
         answer: "Tất cả học sinh THPT (lớp 10-12) trên toàn quốc. Có 2 bảng: Bảng A và Bảng B."
     },
     {

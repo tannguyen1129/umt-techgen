@@ -9,12 +9,14 @@ import {
   Phone, Mail, School, Award, FileBadge, CheckCircle, AlertCircle, 
   Loader2, Clock, FileSpreadsheet, AlertTriangle,
   Trash2, LayoutDashboard, StickyNote, Save, Pencil, Megaphone,
-  Search, SlidersHorizontal, ArrowRight
+  Search, SlidersHorizontal, ArrowRight,
+  Send,
 } from "lucide-react";
 import Link from "next/link";
 import { logoutAdmin, getCurrentRole } from "@/app/actions/auth";
 import { useRouter } from "next/navigation";
 import { EditModal } from "@/components/EditModal";
+import { sendEmailNotification } from "@/app/actions/register";
 
 // --- CẤU HÌNH ĐỊA CHỈ BACKEND ---
 const BACKEND_URL = ""; 
@@ -157,11 +159,28 @@ const DetailModal = ({
 }) => {
     const [note, setNote] = useState(candidate.note || "");
     const [isSaving, setIsSaving] = useState(false);
+    const [emailNote, setEmailNote] = useState("");
+    const [isSendingMail, setIsSendingMail] = useState(false);
+    const [showEmailForm, setShowEmailForm] = useState(false);
 
     const handleSaveNoteClick = async () => {
         setIsSaving(true);
         await onSaveNote(candidate.id, note);
         setIsSaving(false);
+    };
+    
+    const handleSendEmail = async () => {
+        if (!emailNote.trim()) return;
+        setIsSendingMail(true);
+        const res = await sendEmailNotification(candidate.id, emailNote);
+        if (res.success) {
+            alert("Đã gửi email thành công!");
+            setShowEmailForm(false);
+            setEmailNote("");
+        } else {
+            alert("Gửi thất bại: " + res.message);
+        }
+        setIsSendingMail(false);
     };
 
     if (!candidate) return null;
@@ -257,6 +276,39 @@ const DetailModal = ({
                         {/* Cột Phải */}
                         <div className="lg:col-span-5 space-y-6">
                              {/* Ghi chú Admin */}
+                             <div className="bg-blue-50 p-5 rounded-2xl border border-blue-200 shadow-sm mt-4">
+            <div className="flex justify-between items-center mb-2">
+                <h3 className="font-bold text-blue-800 flex items-center gap-2">
+                    <Mail size={18}/> Gửi Email cho thí sinh
+                </h3>
+                <button 
+                    onClick={() => setShowEmailForm(!showEmailForm)}
+                    className="text-xs bg-white border border-blue-200 text-blue-600 px-3 py-1 rounded-lg font-bold hover:bg-blue-100 transition"
+                >
+                    {showEmailForm ? "Đóng" : "Soạn mail"}
+                </button>
+            </div>
+            
+            {showEmailForm && (
+                <div className="animate-in fade-in slide-in-from-top-2">
+                    <textarea 
+                        className="w-full text-sm p-3 rounded-xl border border-blue-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400/50 min-h-[80px] mb-2"
+                        placeholder="Nhập nội dung cần nhắn gửi (Ví dụ: Em cần gửi lại ảnh rõ hơn)..."
+                        value={emailNote}
+                        onChange={(e) => setEmailNote(e.target.value)}
+                    ></textarea>
+                    <button 
+                        onClick={handleSendEmail}
+                        disabled={isSendingMail || !emailNote}
+                        className="w-full bg-blue-600 text-white font-bold py-2 rounded-xl hover:bg-blue-700 transition flex items-center justify-center gap-2 disabled:opacity-50"
+                    >
+                        {isSendingMail ? <Loader2 className="animate-spin" size={16}/> : <Send size={16}/>}
+                        Gửi ngay
+                    </button>
+                </div>
+            )}
+        </div>
+
                              <div className="bg-yellow-50 p-5 rounded-2xl border border-yellow-200 shadow-sm">
                                 <div className="flex justify-between items-center mb-2">
                                     <h3 className="font-bold text-yellow-800 flex items-center gap-2">

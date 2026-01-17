@@ -129,7 +129,7 @@ export default function LoginPage() {
 
             <div className="mt-8 text-center">
                 <p className="text-xs text-slate-400">
-                    &copy; 2025 UMT TechGen. Protected by Admin Shield.
+                    &copy; 2026 UMT TechGen. Protected by Admin Shield.
                 </p>
             </div>
         </div>

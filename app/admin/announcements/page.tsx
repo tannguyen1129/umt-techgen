@@ -1,14 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-// Import từ file action vừa tách ở Bước 1
+// Import từ file action
 import { getAnnouncements, createAnnouncement, deleteAnnouncement, updateAnnouncement } from "@/app/actions/announcement";
-import { getCurrentRole, logoutAdmin } from "@/app/actions/auth"; // Import check role
+import { getCurrentRole, logoutAdmin } from "@/app/actions/auth"; 
 import { useRouter } from "next/navigation";
 import { 
   Megaphone, Trash2, Plus, Loader2, Pencil, Save, X, 
   FileText, ListChecks, Calendar, LayoutTemplate, 
-  LayoutDashboard, MessageSquare, LogOut, CheckCircle, AlertCircle, AlertTriangle
+  LayoutDashboard, MessageSquare, LogOut, CheckCircle, AlertCircle, 
+  Paperclip, Download // <-- Thêm icon cho file
 } from "lucide-react";
 import Link from "next/link";
 
@@ -58,7 +59,7 @@ const SAMPLE_TEMPLATES = [
     {
         name: "Tin chung",
         icon: <FileText size={16}/>,
-        content: `<p><strong>UMT TechGen 2025</strong> chính thức khởi động!</p>
+        content: `<p><strong>UMT TechGen 2026</strong> chính thức khởi động!</p>
 <p>Đây là sân chơi học thuật dành riêng cho học sinh THPT đam mê công nghệ với tổng giải thưởng lên đến <strong>100 triệu đồng</strong>.</p>
 <h3>1. Đối tượng tham gia</h3>
 <p>Tất cả học sinh THPT trên toàn quốc yêu thích Toán - Tin và Lập trình.</p>
@@ -82,7 +83,7 @@ export default function AdminAnnouncements() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
-  const [role, setRole] = useState("VIEWER"); // Mặc định Viewer
+  const [role, setRole] = useState("VIEWER"); 
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   const router = useRouter();
@@ -91,8 +92,12 @@ export default function AdminAnnouncements() {
     title: "",
     type: "NEWS",
     summary: "",
-    content: "" 
+    content: "",
+    isVisible: true // Thêm trạng thái hiển thị
   });
+
+  // State riêng cho File
+  const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => { 
       loadData(); 
@@ -108,7 +113,6 @@ export default function AdminAnnouncements() {
     setLoading(true);
     try {
         const data = await getAnnouncements();
-        // Kiểm tra xem data trả về có phải mảng không (phòng trường hợp lỗi)
         setList(Array.isArray(data) ? data : []);
     } catch (e) {
         setList([]);
@@ -122,15 +126,18 @@ export default function AdminAnnouncements() {
           title: item.title,
           type: item.type,
           summary: item.summary || "",
-          content: item.content || ""
+          content: item.content || "",
+          isVisible: item.isVisible
       });
+      setFile(null); // Reset file
       setEditingId(item.id);
       setShowForm(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleCancel = () => {
-      setFormData({ title: "", type: "NEWS", summary: "", content: "" });
+      setFormData({ title: "", type: "NEWS", summary: "", content: "", isVisible: true });
+      setFile(null);
       setEditingId(null);
       setShowForm(false);
   };
@@ -141,6 +148,7 @@ export default function AdminAnnouncements() {
       }
   };
 
+  // --- XỬ LÝ SUBMIT VỚI FORMDATA ---
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     if(!formData.title || !formData.summary) {
@@ -148,17 +156,27 @@ export default function AdminAnnouncements() {
         return;
     }
     
-    // Nút loading UI
     const btn = e.nativeEvent.submitter;
     const originalText = btn.innerText;
     btn.innerText = "Đang lưu...";
     btn.disabled = true;
 
+    // Chuyển dữ liệu sang FormData
+    const payload = new FormData();
+    payload.append('title', formData.title);
+    payload.append('type', formData.type);
+    payload.append('summary', formData.summary);
+    payload.append('content', formData.content);
+    payload.append('isVisible', String(formData.isVisible));
+    if (file) {
+        payload.append('file', file);
+    }
+
     let res;
     if (editingId) {
-        res = await updateAnnouncement(editingId, formData);
+        res = await updateAnnouncement(editingId, payload);
     } else {
-        res = await createAnnouncement(formData);
+        res = await createAnnouncement(payload);
     }
 
     if (res.success) {
@@ -197,7 +215,7 @@ export default function AdminAnnouncements() {
 
       <div className="max-w-[1600px] mx-auto min-h-[85vh] flex flex-col gap-6">
         
-        {/* --- HEADER ĐỒNG BỘ --- */}
+        {/* --- HEADER --- */}
         <div className="flex justify-between items-center bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
              <div>
                 <h1 className="text-xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
@@ -230,7 +248,6 @@ export default function AdminAnnouncements() {
                 </Link>
              </div>
 
-             {/* Nút Tạo Mới (Ẩn nếu là Viewer) */}
              {!isViewer && !showForm && (
                 <button 
                     onClick={() => setShowForm(true)} 
@@ -257,36 +274,66 @@ export default function AdminAnnouncements() {
                             <label className="block text-sm font-bold text-slate-700 mb-2">Tiêu đề bài viết <span className="text-red-500">*</span></label>
                             <input required className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none font-bold text-slate-800 placeholder:font-normal transition" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} placeholder="Nhập tiêu đề thật hấp dẫn..." />
                         </div>
-                        <div>
-                            <label className="block text-sm font-bold text-slate-700 mb-2">Phân loại <span className="text-red-500">*</span></label>
-                            <div className="relative">
-                                <select className="w-full p-3 border border-slate-200 rounded-xl bg-slate-50 font-medium text-slate-700 focus:outline-none focus:border-blue-500 appearance-none transition" value={formData.type} onChange={e => setFormData({...formData, type: e.target.value})}>
-                                    <option value="NEWS">📰 Tin tức (News)</option>
-                                    <option value="RESULT">🏆 Kết quả thi (Result)</option>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-bold text-slate-700 mb-2">Phân loại <span className="text-red-500">*</span></label>
+                                <div className="relative">
+                                    <select className="w-full p-3 border border-slate-200 rounded-xl bg-slate-50 font-medium text-slate-700 focus:outline-none focus:border-blue-500 appearance-none transition" value={formData.type} onChange={e => setFormData({...formData, type: e.target.value})}>
+                                        <option value="NEWS">Tin tức (News)</option>
+                                        <option value="RESULT">Kết quả thi</option>
+                                    </select>
+                                    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500"><LayoutTemplate size={16}/></div>
+                                </div>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-bold text-slate-700 mb-2">Hiển thị</label>
+                                <select 
+                                    className="w-full p-3 border border-slate-200 rounded-xl bg-slate-50 font-medium text-slate-700 outline-none"
+                                    value={String(formData.isVisible)}
+                                    onChange={e => setFormData({...formData, isVisible: e.target.value === 'true'})}
+                                >
+                                    <option value="true">Hiện</option>
+                                    <option value="false">Ẩn</option>
                                 </select>
-                                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500"><LayoutTemplate size={16}/></div>
                             </div>
                         </div>
                     </div>
 
-                    <div>
-                        <label className="block text-sm font-bold text-slate-700 mb-2">Tóm tắt ngắn <span className="text-red-500">*</span></label>
-                        <textarea required className="w-full p-3 border border-slate-200 rounded-xl h-24 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-sm leading-relaxed transition" value={formData.summary} onChange={e => setFormData({...formData, summary: e.target.value})} placeholder="Mô tả ngắn gọn nội dung (sẽ hiển thị ở danh sách bên ngoài)..."></textarea>
+                    {/* FIELD TÓM TẮT & UPLOAD FILE */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                         <div className="md:col-span-2">
+                            <label className="block text-sm font-bold text-slate-700 mb-2">Tóm tắt ngắn <span className="text-red-500">*</span></label>
+                            <textarea required className="w-full p-3 border border-slate-200 rounded-xl h-24 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-sm leading-relaxed transition" value={formData.summary} onChange={e => setFormData({...formData, summary: e.target.value})} placeholder="Mô tả ngắn gọn nội dung..."></textarea>
+                         </div>
+                         
+                         {/* FILE UPLOAD INPUT */}
+                         <div className="bg-slate-50 p-4 rounded-xl border border-dashed border-slate-300 flex flex-col justify-center">
+                            <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
+                                <Paperclip size={16} /> Đính kèm file
+                            </label>
+                            <label className="cursor-pointer bg-white hover:bg-blue-50 text-slate-700 px-4 py-3 rounded-xl border border-slate-200 shadow-sm transition flex flex-col items-center gap-2 text-center group">
+                                <span className="font-medium text-sm text-blue-600 group-hover:underline">
+                                    {file ? file.name : (editingId ? "Giữ file cũ (hoặc bấm để đổi)" : "Chọn file PDF/Word...")}
+                                </span>
+                                <input 
+                                    type="file" 
+                                    className="hidden" 
+                                    accept=".pdf,.doc,.docx,.xls,.xlsx"
+                                    onChange={(e) => setFile(e.target.files?.[0] || null)}
+                                />
+                            </label>
+                         </div>
                     </div>
 
                     {/* EDITOR SECTION */}
                     <div>
                         <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-2 gap-2">
                             <label className="block text-sm font-bold text-slate-700">Nội dung chi tiết (HTML)</label>
-                            
-                            {/* Templates */}
                             <div className="flex gap-2 bg-slate-50 p-1 rounded-lg border border-slate-100">
                                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider self-center mx-2 hidden sm:block">Mẫu nhanh:</span>
                                 {SAMPLE_TEMPLATES.map((tpl, idx) => (
                                     <button 
-                                        key={idx}
-                                        type="button"
-                                        onClick={() => applyTemplate(tpl.content)}
+                                        key={idx} type="button" onClick={() => applyTemplate(tpl.content)}
                                         className="text-xs flex items-center gap-1 px-3 py-1.5 bg-white hover:bg-blue-50 hover:text-blue-600 border border-slate-200 rounded-md transition font-medium shadow-sm"
                                         title={`Chèn mẫu ${tpl.name}`}
                                     >
@@ -340,6 +387,7 @@ export default function AdminAnnouncements() {
                             <tr>
                                 <th className="px-8 py-5">Tiêu đề</th>
                                 <th className="px-6 py-5">Loại</th>
+                                <th className="px-6 py-5">Đính kèm</th>
                                 <th className="px-6 py-5">Ngày đăng</th>
                                 {!isViewer && <th className="px-6 py-5 text-center">Thao tác</th>}
                             </tr>
@@ -359,6 +407,13 @@ export default function AdminAnnouncements() {
                                         }`}>
                                             {item.type === 'RESULT' ? 'Kết quả' : 'Tin tức'}
                                         </span>
+                                    </td>
+                                    <td className="px-6 py-5">
+                                        {item.fileName ? (
+                                            <span className="flex items-center gap-1 text-blue-600 text-xs font-bold bg-blue-50 px-2 py-1 rounded border border-blue-100 w-fit">
+                                                <Paperclip size={12}/> {item.fileName}
+                                            </span>
+                                        ) : <span className="text-slate-300">-</span>}
                                     </td>
                                     <td className="px-6 py-5 text-slate-500 font-mono text-xs">
                                         {new Date(item.createdAt).toLocaleDateString('vi-VN')}

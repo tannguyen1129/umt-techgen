@@ -8,7 +8,7 @@ import { Lock, Code, Facebook, Globe, Mail, Phone, MapPin } from "lucide-react";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "UMT TechGen 2025",
+  title: "UMT TechGen 2026",
   description: "Giải mã công nghệ - Khơi nguồn đam mê",
 };
 
@@ -113,7 +113,7 @@ export default function RootLayout({
 
             {/* DÒNG BẢN QUYỀN & CREDITS */}
             <div className="text-center pt-8 border-t border-slate-800 text-xs text-slate-500 flex flex-col items-center gap-4">
-                <p>© 2025 UMT TechGen. Bản quyền thuộc về Trường Đại học Quản lý và Công nghệ Thành phố Hồ Chí Minh.</p>
+                <p>© 2026 UMT TechGen. Bản quyền thuộc về Trường Đại học Quản lý và Công nghệ Thành phố Hồ Chí Minh.</p>
                 
                 {/* Credit line - Highlight nhẹ */}
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800/50 border border-slate-700/50 hover:border-blue-900/50 transition group cursor-default"><Code size={14} className="text-blue-500 group-hover:text-blue-400" />

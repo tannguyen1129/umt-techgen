@@ -32,7 +32,7 @@ const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     // Logic ngày
     const now = new Date();
-    const deadline = new Date("2026-01-15T23:59:59");
+    const deadline = new Date("2026-01-31T23:59:59");
     const displayDate = now < deadline ? now : deadline;
     const d = displayDate.getDate();
     const m = displayDate.getMonth() + 1;
@@ -49,7 +49,7 @@ const [currentImageIndex, setCurrentImageIndex] = useState(0);
             <BellRing className="w-5 h-5 animate-bounce" /> THÔNG BÁO:
         </span>
         <span className="text-white font-bold text-sm md:text-lg whitespace-nowrap">
-            Đến ngày <span className="text-yellow-300 underline decoration-2 underline-offset-4">{dynamicDateText}</span> Kỳ thi TechGen 2025 vẫn nhận đơn đăng ký
+            Đến ngày <span className="text-yellow-300 underline decoration-2 underline-offset-4">{dynamicDateText}</span> Kỳ thi TechGen 2026 vẫn nhận đơn đăng ký
         </span>
         <span className="flex items-center gap-1 text-white/90 text-sm md:text-base italic whitespace-nowrap">
              — <Zap className="w-4 h-4 text-yellow-400 fill-yellow-400"/> Nhanh tay đăng ký tranh tài để giành các giải thưởng hấp dẫn với tổng giải thưởng hơn 100 triệu đồng! 
@@ -60,14 +60,15 @@ const [currentImageIndex, setCurrentImageIndex] = useState(0);
   // DATA ĐỐI TÁC
   const strategicPartners = [
     { id: 0, name: "UMT", src: "/images/logo_umt_ntt.png", isHost: true }, 
-    { id: 1, name: "ZaloPay", src: "/images/Zalopay_logo_umt.png", website: "https://zalopay.vn/" },
-    { id: 2, name: "Hội Tin học TP.HCM", src: "/images/hca_hcm.png", website: "https://www.hca.org.vn/" },
-    { id: 3, name: "SITC", src: "/images/sitc.png", website: "https://www.sitc.edu.vn/" },
+    { id: 1, name: "Hội Tin học TP.HCM", src: "/images/hca_hcm.png", website: "https://www.hca.org.vn/" },
+    { id: 2, name: "VNetwork", src: "/images/14_Vnetwork.png", website: "https://www.vnetwork.vn/" },
+    { id: 3, name: "ZaloPay", src: "/images/Zalopay_logo_umt.png", website: "https://zalopay.vn/" },
+    { id: 4, name: "SITC", src: "/images/sitc.png", website: "https://www.sitc.edu.vn/" },
   ];
 
   const companionPartners = [
-    { id: 4, name: "Vinasa", src: "/images/13_vinasa.png", website: "https://vinasa.org.vn/" },
-    { id: 5, name: "VNPT", src: "/images/vnpt-1.png", website: "https://vinhlong.vnpt.vn/" },
+    { id: 5, name: "Vinasa", src: "/images/13_vinasa.png", website: "https://vinasa.org.vn/" },
+    { id: 6, name: "VNPT", src: "/images/vnpt-1.png", website: "https://vinhlong.vnpt.vn/" },
     { id: 6, name: "Vinaphone", src: "/images/vinaphone.png", website: "https://vinhlong.vnpt.vn/" },
     { id: 7, name: "BytePlus", src: "/images/BytePlus_Company_Logo.png", website: "https://www.byteplus.com/en" },
     { id: 8, name: "Đoàn Thanh Niên", src: "/images/logo-doan-thanh-nien.png", website: "https://www.facebook.com/profile.php?id=61582599270594" },
@@ -80,8 +81,7 @@ const [currentImageIndex, setCurrentImageIndex] = useState(0);
     { id: 15, name: "SoftWorld", src: "/images/11_softworld_co.png", website: "https://softworldvietnam.com/" },
     { id: 16, name: "VietDynamic", src: "/images/12_vietdynamic.png", website: "https://vietdynamic.com.vn/" },
     { id: 17, name: "AIHAY", src: "/images/4_AIHAY.png", website: "https://ai-hay.vn/" },
-    { id: 18, name: "VNetwork", src: "/images/14_Vnetwork.png", website: "https://www.vnetwork.vn/" },
-    { id: 19, name: "WESET", src: "/images/15_weset.png", website: "https://weset.edu.vn/" },
+    { id: 18, name: "WESET", src: "/images/15_weset.png", website: "https://weset.edu.vn/" },
   ];
 
   return (
@@ -130,20 +130,23 @@ const [currentImageIndex, setCurrentImageIndex] = useState(0);
                     {/* Logo Chiến Lược - Responsive Size */}
                     <div className="flex flex-wrap justify-center items-center gap-6 md:gap-20 mb-6 md:mb-10">
                         {strategicPartners.map((partner) => (
-                            <div 
-                                key={partner.id} 
-                                // Mobile: h-12 w-24 | PC: h-24 w-48 -> Giúp logo trên mobile nhỏ gọn hơn, không bị vỡ layout
-                                className={`group relative h-12 w-24 md:h-24 md:w-48 transition-all duration-300 hover:scale-105 ${partner.id === 2 ? 'scale-90 md:scale-75' : ''}`}
-                            >
-                                <Image 
-                                    src={partner.src} 
-                                    alt={partner.name} 
-                                    fill 
-                                    className="object-contain filter drop-shadow-sm" 
-                                    title={partner.name}
-                                />
-                            </div>
-                        ))}
+    <div 
+        key={partner.id} 
+        // Mobile: h-12 w-24 | PC: h-24 w-48
+        // SỬA DÒNG DƯỚI ĐÂY:
+        className={`group relative h-12 w-24 md:h-24 md:w-48 transition-all duration-300 hover:scale-105 ${
+            partner.id === 2 ? 'scale-110 md:scale-125' : ''
+        }`}
+    >
+        <Image 
+            src={partner.src} 
+            alt={partner.name} 
+            fill 
+            className="object-contain filter drop-shadow-sm" 
+            title={partner.name}
+        />
+    </div>
+))}
                     </div>
 
                     <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent my-6 md:my-8 max-w-4xl mx-auto"></div>
@@ -171,7 +174,7 @@ const [currentImageIndex, setCurrentImageIndex] = useState(0);
                     
                     {/* Main Title - Sử dụng text-balance để tránh rớt chữ xấu */}
                     <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-slate-900 leading-[1.15] md:leading-[1.1] tracking-tight text-balance">
-                        UMT TechGen <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 inline-block">2025</span>
+                        UMT TechGen <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 inline-block">2026</span>
                     </h1>
                     
                     {/* Slogan & Description */}
@@ -197,7 +200,7 @@ const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
                     {/* Hashtags */}
                     <div className="flex flex-wrap gap-2 justify-center lg:justify-start pt-2">
-                         {['#UMTTechGen2025', '#GiaiMaCongNghe', '#KhoiNguonDamMe', '#UMTOJ'].map((tag, idx) => (
+                         {['#UMTTechGen2026', '#GiaiMaCongNghe', '#KhoiNguonDamMe', '#UMTOJ'].map((tag, idx) => (
                             <span key={idx} className="text-[10px] md:text-xs font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded-md">
                                 {tag}
                             </span>
@@ -257,7 +260,7 @@ const [currentImageIndex, setCurrentImageIndex] = useState(0);
             Mục tiêu & Giá trị
           </h2>
           <p className="text-slate-600 text-base md:text-lg mb-8 md:mb-12 max-w-3xl mx-auto text-center text-pretty">
-            TechGen 2025 không chỉ là một kỳ thi, mà là bệ phóng tài năng công nghệ trẻ. 
+            TechGen 2026 không chỉ là một kỳ thi, mà là bệ phóng tài năng công nghệ trẻ. 
             Chúng tôi tìm kiếm những "chiến binh" xuất sắc nhất để trao tặng các suất học bổng toàn phần.
           </p>
           

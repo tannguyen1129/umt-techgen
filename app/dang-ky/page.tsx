@@ -121,7 +121,7 @@ export default function RegistrationPage() {
         // COPY Y CHANG CẤU HÌNH TỪ BACKEND SANG (Thêm +07:00)
         const rounds = [
             { id: 1, start: new Date('2025-10-01T00:00:00+07:00'), end: new Date('2025-11-30T23:59:59+07:00') },
-            { id: 2, start: new Date('2025-12-04T14:15:00+07:00'), end: new Date('2026-01-15T23:59:59+07:00') }
+            { id: 2, start: new Date('2025-12-04T14:15:00+07:00'), end: new Date('2026-01-31T23:59:59+07:00') }
         ];
 
         const activeRound = rounds.find(r => now >= r.start && now <= r.end);
@@ -271,7 +271,7 @@ export default function RegistrationPage() {
         <div className="text-center mb-12">
             <h1 className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-4 tracking-tight">Đơn đăng ký tham dự</h1>
             <p className="text-lg text-slate-500 max-w-2xl mx-auto font-medium">
-                Hãy điền đầy đủ thông tin mà BTC yêu cầu bên dưới để tham gia tranh tài tại <span className="text-blue-600 font-bold bg-blue-50 px-2 py-1 rounded-lg">UMT TechGen 2025</span>.
+                Hãy điền đầy đủ thông tin mà BTC yêu cầu bên dưới để tham gia tranh tài tại <span className="text-blue-600 font-bold bg-blue-50 px-2 py-1 rounded-lg">UMT TechGen 2026</span>.
             </p>
         </div>
 
