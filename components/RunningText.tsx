@@ -4,8 +4,8 @@ import { Sparkles } from 'lucide-react'; // Hoặc icon nào bạn thích
 const RunningTextSection = () => {
   const content = [
     "Chào mừng các bạn học sinh đến với UMT TechGen 2026!",
-    "Ban Tổ chức chân thành cảm ơn và tri ân các đối tác chiến lược: Ứng dụng Zalopay thuộc Công ty Cổ phần Zion, Hội Tin học Thành phồ Hồ Chí Minh và Trường Trung cấp Công nghệ thông tin Sài Gòn",
-    "Ban Tổ chức chân thành cảm ơn và tri ân các đối tác đồng hành: Hiệp hội Phần mềm và Dịch vụ Công nghệ thông tin Việt Nam, Vinaphone Vĩnh Long, VNPT Vĩnh Long, BytePlus Việt Nam, Đoàn Thanh niên Cộng sản Hồ Chí Minh Trường Đại học Quản lý và Công nghệ TPHCM, Công ty Cổ phần An ninh mạng THD, Tổ chức InnoEx, Công ty Cổ phần IVS, Công Ty TNHH Braney, Ngân hàng TMCP Đại Chúng Việt Nam, Công ty Cổ phần Công nghệ Quickom, Công ty TNHH Softworld Việt Nam, Công ty Cổ phần VIET DYNAMIC, Công ty Cổ phần AI HAY, Công Ty Cổ Phần VNETWORK và Trung tâm Anh ngữ WESET"
+    "Ban Tổ chức chân thành cảm ơn và tri ân các đối tác chiến lược: Hội Tin học Thành phồ Hồ Chí Minh, Công Ty Cổ Phần VNETWORK, Ứng dụng Zalopay thuộc Công ty Cổ phần Zion,  và Trường Trung cấp Công nghệ thông tin Sài Gòn",
+    "Ban Tổ chức chân thành cảm ơn và tri ân các đối tác đồng hành: Hiệp hội Phần mềm và Dịch vụ Công nghệ thông tin Việt Nam, Vinaphone Vĩnh Long, VNPT Vĩnh Long, BytePlus Việt Nam, Đoàn Thanh niên Cộng sản Hồ Chí Minh Trường Đại học Quản lý và Công nghệ TPHCM, Công ty Cổ phần An ninh mạng THD, Tổ chức InnoEx, Công ty Cổ phần IVS, Công Ty TNHH Braney, Ngân hàng TMCP Đại Chúng Việt Nam, Công ty Cổ phần Công nghệ Quickom, Công ty TNHH Softworld Việt Nam, Công ty Cổ phần VIET DYNAMIC, Công ty Cổ phần AI HAY và Trung tâm Anh ngữ WESET"
   ];
 
   // Gợi ý thêm nội dung (bạn có thể bỏ comment để dùng)

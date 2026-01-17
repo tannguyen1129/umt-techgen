@@ -1,6 +1,6 @@
 # 1. Install dependencies only when needed
 FROM node:20-alpine AS deps
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+# Cần libc6-compat cho một số thư viện native
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
@@ -14,9 +14,14 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# --- ĐÃ XÓA PRISMA GENERATE Ở ĐÂY ---
+# --- [QUAN TRỌNG] THÊM ĐOẠN NÀY ĐỂ NHẬN BIẾN LÚC BUILD ---
+# Khai báo biến ARG (nhận từ docker-compose build --build-arg)
+ARG NEXT_PUBLIC_API_URL
+# Gán giá trị ARG vào biến môi trường ENV để quá trình build Next.js đọc được
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+# ---------------------------------------------------------
 
-# Build Next.js
+# Build Next.js (Lúc này code sẽ được đóng gói với giá trị NEXT_PUBLIC_API_URL)
 RUN npm run build
 
 # 3. Production image, copy all the files and run next
@@ -24,8 +29,6 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
-
-# --- ĐÃ XÓA CÀI ĐẶT OPENSSL Ở ĐÂY ---
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
@@ -38,7 +41,7 @@ RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
 # Copy standalone build output
-# Next.js tự động tạo folder standalone khi build (nếu cấu hình trong next.config.js output: 'standalone')
+# (Yêu cầu file next.config.js phải có output: 'standalone')
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 

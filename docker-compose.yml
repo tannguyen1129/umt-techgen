@@ -3,13 +3,20 @@ version: '3.8'
 services:
   # 1. FRONTEND (Next.js App)
   umt-techgen-web:
-    build: .
+    build: 
+      context: .
+      # --- [QUAN TRỌNG] Truyền biến vào Dockerfile lúc Build ---
+      args:
+        NEXT_PUBLIC_API_URL: https://techgen.umt.edu.vn/api
+      # ---------------------------------------------------------
     container_name: umt-techgen-web
     restart: always
     ports:
       - "3000:3000"
     environment:
+      # Biến môi trường lúc chạy (Runtime)
       - NEXT_PUBLIC_API_URL=https://techgen.umt.edu.vn/api
+      - NEXTAUTH_URL=https://techgen.umt.edu.vn
 
   # 2. NGINX (Web Server & SSL)
   nginx:

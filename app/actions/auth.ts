@@ -3,7 +3,7 @@
 import { cookies } from 'next/headers';
 
 // 1. Ưu tiên lấy từ biến môi trường, nếu không có thì mới dùng IP cứng (Fallback)
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://10.11.10.21:4000/api"; 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
 
 // Hàm loginAdmin
 export async function loginAdmin(formData: FormData) {

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-// Import từ file action
 import { getAnnouncements, createAnnouncement, deleteAnnouncement, updateAnnouncement } from "@/app/actions/announcement";
 import { getCurrentRole, logoutAdmin } from "@/app/actions/auth"; 
 import { useRouter } from "next/navigation";
@@ -9,65 +8,43 @@ import {
   Megaphone, Trash2, Plus, Loader2, Pencil, Save, X, 
   FileText, ListChecks, Calendar, LayoutTemplate, 
   LayoutDashboard, MessageSquare, LogOut, CheckCircle, AlertCircle, 
-  Paperclip, Download // <-- Thêm icon cho file
+  Paperclip, FileBadge // <-- Thêm icon FileBadge
 } from "lucide-react";
 import Link from "next/link";
 
-// --- MẪU SOẠN THẢO SẴN (TEMPLATES) ---
+// --- MẪU SOẠN THẢO SẴN (CẬP NHẬT) ---
 const SAMPLE_TEMPLATES = [
+    {
+        name: "Văn bản HC",
+        icon: <FileBadge size={16}/>,
+        content: `<div style="text-align: center; font-family: 'Times New Roman', serif;">
+    <p style="font-weight: bold; text-transform: uppercase; margin-bottom: 5px;">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
+    <p style="font-weight: bold; text-decoration: underline;">Độc lập - Tự do - Hạnh phúc</p>
+    <br/>
+    <h3 style="font-weight: bold; text-transform: uppercase;">THÔNG BÁO</h3>
+    <p style="font-style: italic;">V/v: Công bố thể lệ vòng chung kết TechGen 2026</p>
+</div>
+<br/>
+<p>Kính gửi: Các đội thi và toàn thể sinh viên,</p>
+<p>Căn cứ vào kế hoạch tổ chức cuộc thi...</p>`
+    },
     {
         name: "Công bố Kết quả",
         icon: <ListChecks size={16}/>,
-        content: `<h3>🎉 Chúc mừng các thí sinh xuất sắc vượt qua vòng thi!</h3>
-<p>Ban Tổ chức xin trân trọng thông báo danh sách các thí sinh đã đạt điểm cao nhất và bước tiếp vào vòng trong:</p>
-<div style="overflow-x:auto;">
-<table border="1" style="border-collapse: collapse; width: 100%; text-align: left;">
-  <thead style="background-color: #f1f5f9;">
-    <tr>
-      <th style="padding: 10px;">SBD</th>
-      <th style="padding: 10px;">Họ và tên</th>
-      <th style="padding: 10px;">Trường</th>
-      <th style="padding: 10px;">Kết quả</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="padding: 10px;">S001</td>
-      <td style="padding: 10px;">Nguyễn Văn A</td>
-      <td style="padding: 10px;">THPT Chuyên Lê Hồng Phong</td>
-      <td style="padding: 10px; color: green; font-weight: bold;">Đậu</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-<p style="margin-top: 15px;">📧 Thông tin chi tiết về vòng thi tiếp theo đã được gửi qua email.</p>`
+        content: `<h3>🎉 Chúc mừng các thí sinh xuất sắc!</h3>
+<p>BTC xin thông báo danh sách thí sinh lọt vào vòng trong:</p>
+<table border="1" style="width: 100%; border-collapse: collapse;">
+  <thead style="background-color: #f1f5f9;"><tr><th style="padding: 8px;">SBD</th><th style="padding: 8px;">Họ tên</th><th style="padding: 8px;">Kết quả</th></tr></thead>
+  <tbody><tr><td style="padding: 8px;">S01</td><td style="padding: 8px;">Nguyễn Văn A</td><td style="padding: 8px; color: green; font-weight: bold;">ĐẠT</td></tr></tbody>
+</table>`
     },
     {
-        name: "Lịch trình",
-        icon: <Calendar size={16}/>,
-        content: `<p>Thân gửi các bạn thí sinh,</p>
-<p>Ban Tổ chức xin thông báo về việc <strong>thay đổi thời gian/địa điểm</strong> như sau:</p>
-<ul style="list-style-type: disc; margin-left: 20px; margin-bottom: 15px;">
-    <li><strong>Thời gian cũ:</strong> 08:00 - 11:30, Thứ Bảy</li>
-    <li><strong>Thời gian mới:</strong> <span style="color: #e11d48; font-weight: bold;">13:30 - 17:00, Chủ Nhật</span></li>
-    <li><strong>Hình thức:</strong> Online qua Microsoft Teams</li>
-</ul>
-<div style="background-color: #fff7ed; border-left: 4px solid #f97316; padding: 10px 15px; color: #9a3412;">
-    <strong>Lưu ý:</strong> Các bạn vui lòng vào phòng chờ trước 15 phút.
-</div>`
-    },
-    {
-        name: "Tin chung",
-        icon: <FileText size={16}/>,
-        content: `<p><strong>UMT TechGen 2026</strong> chính thức khởi động!</p>
-<p>Đây là sân chơi học thuật dành riêng cho học sinh THPT đam mê công nghệ với tổng giải thưởng lên đến <strong>100 triệu đồng</strong>.</p>
-<h3>1. Đối tượng tham gia</h3>
-<p>Tất cả học sinh THPT trên toàn quốc yêu thích Toán - Tin và Lập trình.</p>
-<p><em>Hẹn gặp lại các bạn tại đấu trường công nghệ đỉnh cao này! 🚀</em></p>`
+        name: "Tin tức chung",
+        icon: <Megaphone size={16}/>,
+        content: `<p><strong>UMT TechGen</strong> chính thức khởi động!</p><p>Sân chơi công nghệ lớn nhất năm...</p>`
     }
 ];
 
-// --- TOAST COMPONENT ---
 const Toast = ({ message, type, onClose }: { message: string; type: 'success' | 'error'; onClose: () => void }) => {
     useEffect(() => { const t = setTimeout(onClose, 3000); return () => clearTimeout(t); }, [onClose]);
     return (
@@ -93,10 +70,9 @@ export default function AdminAnnouncements() {
     type: "NEWS",
     summary: "",
     content: "",
-    isVisible: true // Thêm trạng thái hiển thị
+    isVisible: true
   });
 
-  // State riêng cho File
   const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => { 
@@ -114,11 +90,7 @@ export default function AdminAnnouncements() {
     try {
         const data = await getAnnouncements();
         setList(Array.isArray(data) ? data : []);
-    } catch (e) {
-        setList([]);
-    } finally {
-        setLoading(false);
-    }
+    } catch (e) { setList([]); } finally { setLoading(false); }
   };
 
   const handleEdit = (item: any) => {
@@ -129,7 +101,7 @@ export default function AdminAnnouncements() {
           content: item.content || "",
           isVisible: item.isVisible
       });
-      setFile(null); // Reset file
+      setFile(null);
       setEditingId(item.id);
       setShowForm(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -143,12 +115,11 @@ export default function AdminAnnouncements() {
   };
 
   const applyTemplate = (templateContent: string) => {
-      if(confirm("Áp dụng mẫu sẽ ghi đè nội dung hiện tại. Bạn có chắc chắn?")) {
+      if(confirm("Áp dụng mẫu sẽ ghi đè nội dung hiện tại?")) {
           setFormData({ ...formData, content: templateContent });
       }
   };
 
-  // --- XỬ LÝ SUBMIT VỚI FORMDATA ---
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     if(!formData.title || !formData.summary) {
@@ -161,23 +132,17 @@ export default function AdminAnnouncements() {
     btn.innerText = "Đang lưu...";
     btn.disabled = true;
 
-    // Chuyển dữ liệu sang FormData
     const payload = new FormData();
     payload.append('title', formData.title);
     payload.append('type', formData.type);
     payload.append('summary', formData.summary);
     payload.append('content', formData.content);
     payload.append('isVisible', String(formData.isVisible));
-    if (file) {
-        payload.append('file', file);
-    }
+    if (file) payload.append('file', file);
 
     let res;
-    if (editingId) {
-        res = await updateAnnouncement(editingId, payload);
-    } else {
-        res = await createAnnouncement(payload);
-    }
+    if (editingId) res = await updateAnnouncement(editingId, payload);
+    else res = await createAnnouncement(payload);
 
     if (res.success) {
         setToast({ message: editingId ? "Cập nhật thành công!" : "Đăng bài thành công!", type: 'success' });
@@ -191,20 +156,30 @@ export default function AdminAnnouncements() {
   };
 
   const handleDelete = async (id: number) => {
-    if(confirm("Hành động này không thể hoàn tác. Bạn chắc chắn muốn xóa?")) {
+    if(confirm("Bạn chắc chắn muốn xóa bài viết này?")) {
         const res = await deleteAnnouncement(id);
         if (res.success) {
             setToast({ message: "Đã xóa bài viết", type: 'success' });
             loadData();
-        } else {
-            setToast({ message: "Lỗi khi xóa bài", type: 'error' });
-        }
+        } else { setToast({ message: "Lỗi khi xóa bài", type: 'error' }); }
     }
   };
 
   const handleLogout = async () => {
       await logoutAdmin();
       router.push("/admin/login");
+  };
+
+  // --- HÀM HELPER RENDER BADGE ---
+  const renderTypeBadge = (type: string) => {
+      switch(type) {
+          case 'RESULT':
+              return <span className="px-3 py-1 rounded-lg text-[10px] font-bold border uppercase tracking-wide bg-blue-50 text-blue-700 border-blue-200">Kết quả</span>;
+          case 'OFFICIAL':
+              return <span className="px-3 py-1 rounded-lg text-[10px] font-bold border uppercase tracking-wide bg-rose-50 text-rose-700 border-rose-200">Văn bản</span>;
+          default:
+              return <span className="px-3 py-1 rounded-lg text-[10px] font-bold border uppercase tracking-wide bg-orange-50 text-orange-700 border-orange-200">Tin tức</span>;
+      }
   };
 
   const isViewer = role === 'VIEWER';
@@ -215,7 +190,7 @@ export default function AdminAnnouncements() {
 
       <div className="max-w-[1600px] mx-auto min-h-[85vh] flex flex-col gap-6">
         
-        {/* --- HEADER --- */}
+        {/* HEADER */}
         <div className="flex justify-between items-center bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
              <div>
                 <h1 className="text-xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
@@ -234,7 +209,7 @@ export default function AdminAnnouncements() {
              </button>
         </div>
 
-        {/* --- TOOLBAR --- */}
+        {/* TOOLBAR */}
         <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-col md:flex-row gap-4 justify-between items-center">
              <div className="flex flex-wrap gap-2 w-full md:w-auto">
                 <Link href="/admin/dashboard" className="bg-white text-slate-600 border border-slate-200 px-4 py-2.5 rounded-xl flex items-center gap-2 hover:bg-slate-50 hover:text-blue-600 transition font-bold text-sm">
@@ -258,7 +233,7 @@ export default function AdminAnnouncements() {
              )}
         </div>
 
-        {/* --- FORM SOẠN THẢO --- */}
+        {/* FORM SOẠN THẢO */}
         {showForm && !isViewer && (
             <div className="bg-white p-6 md:p-8 rounded-2xl shadow-xl border border-slate-200 animate-in slide-in-from-top-5">
                 <div className="flex justify-between items-center mb-6 border-b border-slate-100 pb-4">
@@ -272,15 +247,16 @@ export default function AdminAnnouncements() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div className="md:col-span-2">
                             <label className="block text-sm font-bold text-slate-700 mb-2">Tiêu đề bài viết <span className="text-red-500">*</span></label>
-                            <input required className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none font-bold text-slate-800 placeholder:font-normal transition" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} placeholder="Nhập tiêu đề thật hấp dẫn..." />
+                            <input required className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none font-bold text-slate-800 placeholder:font-normal transition" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} placeholder="VD: Quyết định phê duyệt danh sách..." />
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-bold text-slate-700 mb-2">Phân loại <span className="text-red-500">*</span></label>
                                 <div className="relative">
                                     <select className="w-full p-3 border border-slate-200 rounded-xl bg-slate-50 font-medium text-slate-700 focus:outline-none focus:border-blue-500 appearance-none transition" value={formData.type} onChange={e => setFormData({...formData, type: e.target.value})}>
-                                        <option value="NEWS">Tin tức (News)</option>
-                                        <option value="RESULT">Kết quả thi</option>
+                                        <option value="NEWS">📰 Tin tức (News)</option>
+                                        <option value="RESULT">🏆 Kết quả thi (Result)</option>
+                                        <option value="OFFICIAL">📜 Văn bản (Official)</option> {/* Thêm option mới */}
                                     </select>
                                     <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500"><LayoutTemplate size={16}/></div>
                                 </div>
@@ -299,33 +275,28 @@ export default function AdminAnnouncements() {
                         </div>
                     </div>
 
-                    {/* FIELD TÓM TẮT & UPLOAD FILE */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                          <div className="md:col-span-2">
                             <label className="block text-sm font-bold text-slate-700 mb-2">Tóm tắt ngắn <span className="text-red-500">*</span></label>
                             <textarea required className="w-full p-3 border border-slate-200 rounded-xl h-24 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-sm leading-relaxed transition" value={formData.summary} onChange={e => setFormData({...formData, summary: e.target.value})} placeholder="Mô tả ngắn gọn nội dung..."></textarea>
                          </div>
                          
-                         {/* FILE UPLOAD INPUT */}
                          <div className="bg-slate-50 p-4 rounded-xl border border-dashed border-slate-300 flex flex-col justify-center">
                             <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
                                 <Paperclip size={16} /> Đính kèm file
                             </label>
                             <label className="cursor-pointer bg-white hover:bg-blue-50 text-slate-700 px-4 py-3 rounded-xl border border-slate-200 shadow-sm transition flex flex-col items-center gap-2 text-center group">
                                 <span className="font-medium text-sm text-blue-600 group-hover:underline">
-                                    {file ? file.name : (editingId ? "Giữ file cũ (hoặc bấm để đổi)" : "Chọn file PDF/Word...")}
+                                    {file ? file.name : (editingId ? "Giữ file cũ (hoặc bấm đổi)" : "Chọn file PDF/Word...")}
                                 </span>
                                 <input 
-                                    type="file" 
-                                    className="hidden" 
-                                    accept=".pdf,.doc,.docx,.xls,.xlsx"
+                                    type="file" className="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx"
                                     onChange={(e) => setFile(e.target.files?.[0] || null)}
                                 />
                             </label>
                          </div>
                     </div>
 
-                    {/* EDITOR SECTION */}
                     <div>
                         <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-2 gap-2">
                             <label className="block text-sm font-bold text-slate-700">Nội dung chi tiết (HTML)</label>
@@ -345,13 +316,8 @@ export default function AdminAnnouncements() {
 
                         <textarea 
                             className="w-full p-4 border border-slate-200 rounded-xl h-80 font-mono text-sm bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-colors" 
-                            value={formData.content} 
-                            onChange={e => setFormData({...formData, content: e.target.value})} 
-                            placeholder="<p>Nội dung chi tiết...</p>"
+                            value={formData.content} onChange={e => setFormData({...formData, content: e.target.value})} placeholder="<p>Nội dung chi tiết...</p>"
                         ></textarea>
-                        <p className="text-xs text-slate-400 mt-2 flex items-center gap-1">
-                            <span className="font-bold text-slate-500">Mẹo:</span> Sử dụng các thẻ HTML cơ bản như &lt;p&gt;, &lt;strong&gt;, &lt;ul&gt;, &lt;table&gt; để trình bày đẹp hơn.
-                        </p>
                     </div>
 
                     <div className="flex justify-end gap-3 pt-6 border-t border-slate-100">
@@ -364,7 +330,7 @@ export default function AdminAnnouncements() {
             </div>
         )}
 
-        {/* --- DANH SÁCH BÀI VIẾT --- */}
+        {/* LIST */}
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col flex-1">
             <div className="px-8 py-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
                 <h3 className="font-bold text-lg text-slate-700">Danh sách đã đăng ({list.length})</h3>
@@ -378,7 +344,7 @@ export default function AdminAnnouncements() {
             ) : list.length === 0 ? (
                 <div className="flex-1 flex flex-col items-center justify-center p-20 text-slate-400 gap-4 opacity-70">
                     <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center"><Megaphone size={32} className="opacity-50"/></div>
-                    <p>Chưa có thông báo nào. {isViewer ? '' : 'Hãy bấm nút "Soạn thông báo mới" ở trên!'}</p>
+                    <p>Chưa có thông báo nào.</p>
                 </div>
             ) : (
                 <div className="overflow-x-auto">
@@ -400,13 +366,8 @@ export default function AdminAnnouncements() {
                                         <div className="text-slate-500 text-xs mt-1 line-clamp-1">{item.summary}</div>
                                     </td>
                                     <td className="px-6 py-5">
-                                        <span className={`px-3 py-1 rounded-lg text-[10px] font-bold border uppercase tracking-wide ${
-                                            item.type === 'RESULT' 
-                                            ? 'bg-blue-50 text-blue-700 border-blue-200' 
-                                            : 'bg-orange-50 text-orange-700 border-orange-200'
-                                        }`}>
-                                            {item.type === 'RESULT' ? 'Kết quả' : 'Tin tức'}
-                                        </span>
+                                        {/* GỌI HÀM RENDER BADGE MỚI */}
+                                        {renderTypeBadge(item.type)}
                                     </td>
                                     <td className="px-6 py-5">
                                         {item.fileName ? (
@@ -418,16 +379,11 @@ export default function AdminAnnouncements() {
                                     <td className="px-6 py-5 text-slate-500 font-mono text-xs">
                                         {new Date(item.createdAt).toLocaleDateString('vi-VN')}
                                     </td>
-                                    
                                     {!isViewer && (
                                         <td className="px-6 py-5 text-center">
                                             <div className="flex items-center justify-center gap-2 opacity-60 group-hover:opacity-100 transition-opacity">
-                                                <button onClick={() => handleEdit(item)} className="p-2.5 bg-white border border-slate-200 text-slate-500 hover:bg-amber-50 hover:text-amber-600 hover:border-amber-200 rounded-xl transition shadow-sm active:scale-95" title="Sửa bài viết">
-                                                    <Pencil size={18}/>
-                                                </button>
-                                                <button onClick={() => handleDelete(item.id)} className="p-2.5 bg-white border border-slate-200 text-slate-500 hover:bg-red-50 hover:text-red-600 hover:border-red-200 rounded-xl transition shadow-sm active:scale-95" title="Xóa bài viết">
-                                                    <Trash2 size={18}/>
-                                                </button>
+                                                <button onClick={() => handleEdit(item)} className="p-2.5 bg-white border border-slate-200 text-slate-500 hover:bg-amber-50 hover:text-amber-600 hover:border-amber-200 rounded-xl transition shadow-sm active:scale-95"><Pencil size={18}/></button>
+                                                <button onClick={() => handleDelete(item.id)} className="p-2.5 bg-white border border-slate-200 text-slate-500 hover:bg-red-50 hover:text-red-600 hover:border-red-200 rounded-xl transition shadow-sm active:scale-95"><Trash2 size={18}/></button>
                                             </div>
                                         </td>
                                     )}

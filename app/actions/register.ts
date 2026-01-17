@@ -1,7 +1,7 @@
 'use server'
 
 // Địa chỉ gốc của API Backend
-const API_BASE = "http://10.11.10.21:4000/api";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
 
 // 1. Đăng ký thí sinh
 export async function registerCandidate(formData: FormData) {

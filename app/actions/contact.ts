@@ -1,18 +1,16 @@
 'use server'
 
-// URL Backend (Dùng IP LAN của VPS)
-const API_URL = "http://10.11.10.21:4000/api";
+// 1. Sửa dòng này
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
 
-// 1. Gửi liên hệ
 export async function submitContact(formData: FormData) {
-    // Lấy dữ liệu từ form, chấp nhận cả 'fullName' hoặc 'name'
     const name = formData.get('fullName') || formData.get('name'); 
     const email = formData.get('email');
     const phone = formData.get('phone');
     const message = formData.get('message');
 
     if (!name || !email || !message) {
-        return { success: false, message: "Vui lòng điền đầy đủ thông tin bắt buộc (Họ tên, Email, Nội dung)." };
+        return { success: false, message: "Vui lòng điền đủ thông tin." };
     }
 
     try {
@@ -27,15 +25,10 @@ export async function submitContact(formData: FormData) {
             }),
         });
 
-        if (!res.ok) {
-            const errorData = await res.json().catch(() => ({}));
-            return { success: false, message: errorData.message || "Gửi thất bại, vui lòng thử lại." };
-        }
-
+        if (!res.ok) return { success: false, message: "Gửi thất bại." };
         return { success: true, message: "Gửi liên hệ thành công!" };
     } catch (error) {
-        console.error("Lỗi gửi liên hệ:", error);
-        return { success: false, message: "Lỗi kết nối đến máy chủ." };
+        return { success: false, message: "Lỗi kết nối server." };
     }
 }
 
